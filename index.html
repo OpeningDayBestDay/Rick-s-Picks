@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Rick's Picks</title>
+<style>
+:root{--cream:#F5EDD6;--red:#E81828;--navy:#002B5C;--card:#FFFBF0;--green:#1a7a1a;--muted:#888;--border:rgba(0,43,92,.12);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:var(--navy);min-height:100vh;}
+
+/* Password */
+#ov{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:999;padding:24px;}
+#ov h1{color:var(--cream);font-size:2rem;font-weight:900;text-align:center;}
+#ov p{color:#9ab;font-size:.9rem;}
+#pwd{padding:12px 20px;font-size:1.1rem;border:3px solid var(--red);border-radius:10px;background:var(--cream);color:var(--navy);text-align:center;width:220px;outline:none;}
+#go{padding:12px 36px;background:var(--red);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:800;cursor:pointer;}
+#err{color:#ff8090;font-size:.85rem;display:none;}
+
+/* Layout */
+#app{display:none;}
+.hdr{background:var(--navy);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.hdr h1{color:var(--cream);font-size:1.75rem;font-weight:900;line-height:1;}
+.hdr sub{display:block;color:var(--red);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;}
+.hdr img{width:60px;height:60px;object-fit:contain;border-radius:8px;}
+.banner{background:var(--red);color:#fff;text-align:center;padding:9px 12px;font-size:.78rem;font-weight:700;}
+.date{text-align:center;padding:12px 12px 4px;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;opacity:.55;}
+
+/* Cards */
+.deck{padding:8px 12px 36px;display:flex;flex-direction:column;gap:14px;max-width:500px;margin:0 auto;}
+.card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 3px 12px rgba(0,43,92,.13);border:1px solid var(--border);}
+.ch{background:var(--navy);color:var(--cream);padding:9px 14px;font-size:.82rem;font-weight:800;text-align:center;text-transform:uppercase;letter-spacing:.8px;}
+.cb{display:grid;grid-template-columns:1fr 1fr;}
+.col{padding:13px 11px;}
+.col:first-child{border-right:1px solid var(--border);}
+.sl{font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:2px;}
+.tn{font-size:.88rem;font-weight:900;color:var(--navy);margin-bottom:10px;line-height:1.15;}
+.col.fav .tn{color:var(--red);}
+.row{margin-bottom:6px;}
+.lbl{font-size:.6rem;text-transform:uppercase;letter-spacing:.3px;color:#aaa;}
+.val{font-size:.92rem;font-weight:700;color:var(--navy);}
+.val.vg{color:#666;font-weight:600;}
+.gp{color:var(--green);font-weight:900;}
+.gn{color:#cc1111;}
+.gz{color:var(--muted);}
+.badge{display:inline-block;margin-top:9px;padding:4px 11px;border-radius:20px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.5px;}
+.b3{background:var(--red);color:#fff;}
+.b2{background:#d46b00;color:#fff;}
+.b1{background:var(--navy);color:var(--cream);}
+
+/* Totals footer */
+.tf{border-top:1px solid var(--border);padding:10px 14px;display:flex;justify-content:space-around;background:#f8f3e4;}
+.tf-col{text-align:center;}
+.tf-lbl{font-size:.6rem;text-transform:uppercase;letter-spacing:.3px;color:#aaa;margin-bottom:2px;}
+.tf-val{font-size:.9rem;font-weight:800;color:var(--navy);}
+.tf-sub{font-size:.65rem;color:var(--muted);margin-top:1px;}
+</style>
+</head>
+<body>
+
+<div id="ov">
+  <h1>Rick's Picks 🔒</h1>
+  <p>Enter the password to view today's picks</p>
+  <input id="pwd" type="password" placeholder="Password" autocomplete="off" onkeydown="if(event.key==='Enter')go()">
+  <button id="go" onclick="go()">Let Me In</button>
+  <span id="err">Wrong password — try again.</span>
+</div>
+
+<div id="app">
+  <div class="hdr">
+    <div>
+      <h1>Rick's Picks</h1>
+      <sub>MLB Prediction Model</sub>
+    </div>
+    <img src="patrick.png" alt="" onerror="this.style.display='none'">
+  </div>
+
+  <div class="banner">
+    1 Unit = 2.5% of Starting Balance &nbsp;·&nbsp; 2 Units = 5.0% &nbsp;·&nbsp; 3 Units = 7.5%
+  </div>
+
+  <div class="date">Sunday · May 17, 2026</div>
+  <div class="deck" id="deck"></div>
+</div>
+
+<script>
+function go(){
+  if(document.getElementById('pwd').value==='sauce'){
+    document.getElementById('ov').style.display='none';
+    document.getElementById('app').style.display='block';
+    sessionStorage.setItem('rp','1');
+  } else {
+    document.getElementById('err').style.display='block';
+    document.getElementById('pwd').value='';
+    document.getElementById('pwd').focus();
+  }
+}
+if(sessionStorage.getItem('rp')==='1'){
+  document.getElementById('ov').style.display='none';
+  document.getElementById('app').style.display='block';
+}
+
+// Game data — model predictions + Vegas lines (Polymarket/Covers, May 17 2026)
+// modelTotal = our projected combined runs
+// vegasOU    = Vegas over/under line
+const G=[
+  {a:'Miami Marlins',      h:'Tampa Bay Rays',
+   amm:'-426',hmm:'+426', aml:'+163',hml:'-163',
+   awp:81.0,hwp:19.0,      avp:38.0,hvp:62.0,
+   modelTotal:8.3, vegasOU:7.5},
+
+  {a:'Baltimore Orioles',  h:'Washington Nationals',
+   amm:'-313',hmm:'+313', aml:'-122',hml:'+122',
+   awp:75.8,hwp:24.2,      avp:55.0,hvp:45.0,
+   modelTotal:8.5, vegasOU:8.5},
+
+  {a:'Philadelphia Phillies',h:'Pittsburgh Pirates',
+   amm:'+176',hmm:'-176', aml:'+113',hml:'-113',
+   awp:36.2,hwp:63.8,      avp:47.0,hvp:53.0,
+   modelTotal:9.8, vegasOU:8.5},
+
+  {a:'Boston Red Sox',     h:'Atlanta Braves',
+   amm:'+123',hmm:'-123', aml:'+150',hml:'-150',
+   awp:44.8,hwp:55.2,      avp:40.0,hvp:60.0,
+   modelTotal:9.7, vegasOU:8.5},
+
+  {a:'Cincinnati Reds',    h:'Cleveland Guardians',
+   amm:'-106',hmm:'+106', aml:'+163',hml:'-163',
+   awp:51.5,hwp:48.5,      avp:38.0,hvp:62.0,
+   modelTotal:8.8, vegasOU:8.0},
+
+  {a:'New York Yankees',   h:'New York Mets',
+   amm:'-145',hmm:'+145', aml:'-127',hml:'+127',
+   awp:59.1,hwp:40.9,      avp:56.0,hvp:44.0,
+   modelTotal:9.1, vegasOU:8.5},
+
+  {a:'Toronto Blue Jays',  h:'Detroit Tigers',
+   amm:'-105',hmm:'+105', aml:'+100',hml:'-100',
+   awp:51.2,hwp:48.8,      avp:50.0,hvp:50.0,
+   modelTotal:8.4, vegasOU:8.5},
+
+  {a:'Chicago Cubs',       h:'Chicago White Sox',
+   amm:'-149',hmm:'+149', aml:'-138',hml:'+138',
+   awp:59.8,hwp:40.2,      avp:58.0,hvp:42.0,
+   modelTotal:10.7, vegasOU:9.0},
+
+  {a:'Milwaukee Brewers',  h:'Minnesota Twins',
+   amm:'-148',hmm:'+148', aml:'-133',hml:'+133',
+   awp:59.7,hwp:40.3,      avp:57.1,hvp:42.9,
+   modelTotal:9.0, vegasOU:7.5},
+
+  {a:'Texas Rangers',      h:'Houston Astros',
+   amm:'-239',hmm:'+239', aml:'-113',hml:'+113',
+   awp:70.5,hwp:29.5,      avp:53.1,hvp:46.9,
+   modelTotal:12.2, vegasOU:9.0},
+
+  {a:'Kansas City Royals', h:'St. Louis Cardinals',
+   amm:'+108',hmm:'-108', aml:'+117',hml:'-117',
+   awp:48.2,hwp:51.8,      avp:46.1,hvp:53.9,
+   modelTotal:9.6, vegasOU:8.5},
+
+  {a:'Arizona Diamondbacks',h:'Colorado Rockies',
+   amm:'-311',hmm:'+311', aml:'-108',hml:'+108',
+   awp:75.7,hwp:24.3,      avp:51.9,hvp:48.1,
+   modelTotal:12.4, vegasOU:12.5},
+
+  {a:'San Francisco Giants',h:'Athletics',
+   amm:'+136',hmm:'-136', aml:'+133',hml:'-133',
+   awp:42.3,hwp:57.7,      avp:42.9,hvp:57.1,
+   modelTotal:11.1, vegasOU:8.0},
+
+  {a:'Los Angeles Dodgers',h:'Los Angeles Angels',
+   amm:'-188',hmm:'+188', aml:'-138',hml:'+138',
+   awp:65.3,hwp:34.7,      avp:58.0,hvp:42.0,
+   modelTotal:9.8, vegasOU:8.5},
+
+  {a:'San Diego Padres',   h:'Seattle Mariners',
+   amm:'+108',hmm:'-108', aml:'+127',hml:'-127',
+   awp:48.1,hwp:51.9,      avp:44.1,hvp:55.9,
+   modelTotal:8.8, vegasOU:7.5},
+];
+
+// Compute value gaps & sort by biggest gap descending
+G.forEach(g=>{
+  g.ag=+(g.awp-g.avp).toFixed(1);
+  g.hg=+(g.hwp-g.hvp).toFixed(1);
+  g.mx=Math.max(Math.abs(g.ag),Math.abs(g.hg));
+});
+G.sort((a,b)=>b.mx-a.mx);
+
+const SH={
+  'Miami Marlins':'Marlins','Tampa Bay Rays':'Rays',
+  'Baltimore Orioles':'Orioles','Washington Nationals':'Nationals',
+  'Philadelphia Phillies':'Phillies','Pittsburgh Pirates':'Pirates',
+  'Boston Red Sox':'Red Sox','Atlanta Braves':'Braves',
+  'Cincinnati Reds':'Reds','Cleveland Guardians':'Guardians',
+  'New York Yankees':'Yankees','New York Mets':'Mets',
+  'Toronto Blue Jays':'Blue Jays','Detroit Tigers':'Tigers',
+  'Chicago Cubs':'Cubs','Chicago White Sox':'White Sox',
+  'Milwaukee Brewers':'Brewers','Minnesota Twins':'Twins',
+  'Texas Rangers':'Rangers','Houston Astros':'Astros',
+  'Kansas City Royals':'Royals','St. Louis Cardinals':'Cardinals',
+  'Arizona Diamondbacks':'D-Backs','Colorado Rockies':'Rockies',
+  'San Francisco Giants':'Giants','Athletics':'Athletics',
+  'Los Angeles Dodgers':'Dodgers','Los Angeles Angels':'Angels',
+  'San Diego Padres':'Padres','Seattle Mariners':'Mariners'
+};
+const s=n=>SH[n]||n;
+
+function badge(g){
+  if(g>=10)return'<span class="badge b3">🔥 3 Units</span>';
+  if(g>=5) return'<span class="badge b2">▲ 2 Units</span>';
+  if(g>=2) return'<span class="badge b1">↑ 1 Unit</span>';
+  return'';
+}
+const gc=v=>v>=2?'gp':v<=-2?'gn':'gz';
+const gf=v=>(v>0?'+':'')+v.toFixed(1)+'%';
+
+// Over/under direction hint
+function ouHint(model, vegas){
+  const diff = (model - vegas).toFixed(1);
+  if(Math.abs(diff) < 0.5) return '';
+  return diff > 0 ? ' · Model: OVER' : ' · Model: UNDER';
+}
+
+const deck=document.getElementById('deck');
+G.forEach(g=>{
+  const af=g.awp>g.hwp;
+  deck.innerHTML+=`
+<div class="card">
+  <div class="ch">${s(g.a)} @ ${s(g.h)}</div>
+  <div class="cb">
+    <div class="col${af?' fav':''}">
+      <div class="sl">Away</div>
+      <div class="tn">${s(g.a)}</div>
+      <div class="row"><div class="lbl">Model ML</div><div class="val">${g.amm}</div></div>
+      <div class="row"><div class="lbl">Vegas ML</div><div class="val vg">${g.aml}</div></div>
+      <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.awp.toFixed(1)}%</div></div>
+      <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.avp.toFixed(1)}%</div></div>
+      <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.ag)}">${gf(g.ag)}</div></div>
+      ${g.ag>=2?badge(g.ag):''}
+    </div>
+    <div class="col${af?'':' fav'}">
+      <div class="sl">Home</div>
+      <div class="tn">${s(g.h)}</div>
+      <div class="row"><div class="lbl">Model ML</div><div class="val">${g.hmm}</div></div>
+      <div class="row"><div class="lbl">Vegas ML</div><div class="val vg">${g.hml}</div></div>
+      <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.hwp.toFixed(1)}%</div></div>
+      <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.hvp.toFixed(1)}%</div></div>
+      <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.hg)}">${gf(g.hg)}</div></div>
+      ${g.hg>=2?badge(g.hg):''}
+    </div>
+  </div>
+  <div class="tf">
+    <div class="tf-col">
+      <div class="tf-lbl">Model Total</div>
+      <div class="tf-val">${g.modelTotal.toFixed(1)} runs</div>
+    </div>
+    <div class="tf-col">
+      <div class="tf-lbl">Vegas O/U</div>
+      <div class="tf-val">${g.vegasOU.toFixed(1)}</div>
+      <div class="tf-sub">${ouHint(g.modelTotal,g.vegasOU)}</div>
+    </div>
+  </div>
+</div>`;
+});
+</script>
+</body>
+</html>
