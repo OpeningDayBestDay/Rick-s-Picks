@@ -30,6 +30,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .deck{padding:8px 12px 36px;display:flex;flex-direction:column;gap:14px;max-width:500px;margin:0 auto;}
 .card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 3px 12px rgba(0,43,92,.13);border:1px solid var(--border);}
 .ch{background:var(--navy);color:var(--cream);padding:9px 14px;font-size:.82rem;font-weight:800;text-align:center;text-transform:uppercase;letter-spacing:.8px;}
+.note-bar{background:#7a5200;color:#ffe9a0;text-align:center;padding:4px 10px;font-size:.68rem;font-weight:700;}
 .cb{display:grid;grid-template-columns:1fr 1fr;}
 .col{padding:13px 11px;}
 .col:first-child{border-right:1px solid var(--border);}
@@ -72,7 +73,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       <h1>Rick's Picks</h1>
       <sub>MLB Prediction Model</sub>
     </div>
-    <img src="patrick.png" alt="" onerror="this.style.display='none'">
+    <img src="patrick.png" alt="Rick's Picks">
   </div>
 
   <div class="banner">
@@ -100,87 +101,54 @@ if(sessionStorage.getItem('rp')==='1'){
   document.getElementById('app').style.display='block';
 }
 
-// Game data — model predictions + Vegas lines (Polymarket/Covers, May 17 2026)
-// modelTotal = our projected combined runs
-// vegasOU    = Vegas over/under line
 const G=[
-  {a:'Miami Marlins',      h:'Tampa Bay Rays',
-   amm:'-426',hmm:'+426', aml:'+163',hml:'-163',
-   awp:81.0,hwp:19.0,      avp:38.0,hvp:62.0,
-   modelTotal:8.3, vegasOU:7.5},
-
-  {a:'Baltimore Orioles',  h:'Washington Nationals',
-   amm:'-313',hmm:'+313', aml:'-122',hml:'+122',
-   awp:75.8,hwp:24.2,      avp:55.0,hvp:45.0,
-   modelTotal:8.5, vegasOU:8.5},
-
+  {a:'Miami Marlins',h:'Tampa Bay Rays',
+   amm:'-165',hmm:'+165',aml:'+163',hml:'-163',
+   awp:62.3,hwp:37.7,avp:38.0,hvp:62.0,modelTotal:8.5,vegasOU:7.5},
+  {a:'Baltimore Orioles',h:'Washington Nationals',
+   amm:'-114',hmm:'+114',aml:'-122',hml:'+122',
+   awp:53.3,hwp:46.7,avp:55.0,hvp:45.0,modelTotal:9.7,vegasOU:8.5},
   {a:'Philadelphia Phillies',h:'Pittsburgh Pirates',
-   amm:'+176',hmm:'-176', aml:'+113',hml:'-113',
-   awp:36.2,hwp:63.8,      avp:47.0,hvp:53.0,
-   modelTotal:9.8, vegasOU:8.5},
-
-  {a:'Boston Red Sox',     h:'Atlanta Braves',
-   amm:'+123',hmm:'-123', aml:'+150',hml:'-150',
-   awp:44.8,hwp:55.2,      avp:40.0,hvp:60.0,
-   modelTotal:9.7, vegasOU:8.5},
-
-  {a:'Cincinnati Reds',    h:'Cleveland Guardians',
-   amm:'-106',hmm:'+106', aml:'+163',hml:'-163',
-   awp:51.5,hwp:48.5,      avp:38.0,hvp:62.0,
-   modelTotal:8.8, vegasOU:8.0},
-
-  {a:'New York Yankees',   h:'New York Mets',
-   amm:'-145',hmm:'+145', aml:'-127',hml:'+127',
-   awp:59.1,hwp:40.9,      avp:56.0,hvp:44.0,
-   modelTotal:9.1, vegasOU:8.5},
-
-  {a:'Toronto Blue Jays',  h:'Detroit Tigers',
-   amm:'-105',hmm:'+105', aml:'+100',hml:'-100',
-   awp:51.2,hwp:48.8,      avp:50.0,hvp:50.0,
-   modelTotal:8.4, vegasOU:8.5},
-
-  {a:'Chicago Cubs',       h:'Chicago White Sox',
-   amm:'-149',hmm:'+149', aml:'-138',hml:'+138',
-   awp:59.8,hwp:40.2,      avp:58.0,hvp:42.0,
-   modelTotal:10.7, vegasOU:9.0},
-
-  {a:'Milwaukee Brewers',  h:'Minnesota Twins',
-   amm:'-148',hmm:'+148', aml:'-133',hml:'+133',
-   awp:59.7,hwp:40.3,      avp:57.1,hvp:42.9,
-   modelTotal:9.0, vegasOU:7.5},
-
-  {a:'Texas Rangers',      h:'Houston Astros',
-   amm:'-239',hmm:'+239', aml:'-113',hml:'+113',
-   awp:70.5,hwp:29.5,      avp:53.1,hvp:46.9,
-   modelTotal:12.2, vegasOU:9.0},
-
-  {a:'Kansas City Royals', h:'St. Louis Cardinals',
-   amm:'+108',hmm:'-108', aml:'+117',hml:'-117',
-   awp:48.2,hwp:51.8,      avp:46.1,hvp:53.9,
-   modelTotal:9.6, vegasOU:8.5},
-
+   amm:'+178',hmm:'-178',aml:'+113',hml:'-113',
+   awp:36.0,hwp:64.0,avp:47.0,hvp:53.0,modelTotal:6.2,vegasOU:8.5},
+  {a:'Boston Red Sox',h:'Atlanta Braves',
+   amm:'+255',hmm:'-255',aml:'+150',hml:'-150',
+   awp:28.2,hwp:71.8,avp:40.0,hvp:60.0,modelTotal:6.3,vegasOU:8.5},
+  {a:'Cincinnati Reds',h:'Cleveland Guardians',
+   amm:'-101',hmm:'+101',aml:'+163',hml:'-163',
+   awp:50.3,hwp:49.7,avp:38.0,hvp:62.0,modelTotal:7.7,vegasOU:8.0},
+  {a:'New York Yankees',h:'New York Mets',
+   amm:'-151',hmm:'+151',aml:'-127',hml:'+127',
+   awp:60.1,hwp:39.9,avp:56.0,hvp:44.0,modelTotal:7.0,vegasOU:8.5},
+  {a:'Toronto Blue Jays',h:'Detroit Tigers',
+   amm:'-153',hmm:'+153',aml:'+100',hml:'-100',
+   awp:60.4,hwp:39.6,avp:50.0,hvp:50.0,modelTotal:6.7,vegasOU:8.5},
+  {a:'Chicago Cubs',h:'Chicago White Sox',
+   amm:'+290',hmm:'-290',aml:'-138',hml:'+138',
+   awp:25.7,hwp:74.3,avp:58.0,hvp:42.0,modelTotal:10.0,vegasOU:9.0},
+  {a:'Milwaukee Brewers',h:'Minnesota Twins',
+   amm:'-495',hmm:'+495',aml:'-133',hml:'+133',
+   awp:83.2,hwp:16.8,avp:57.1,hvp:42.9,modelTotal:6.5,vegasOU:7.5},
+  {a:'Texas Rangers',h:'Houston Astros',
+   amm:'-105',hmm:'+105',aml:'-113',hml:'+113',
+   awp:51.2,hwp:48.8,avp:53.1,hvp:46.9,modelTotal:8.4,vegasOU:9.0},
+  {a:'Kansas City Royals',h:'St. Louis Cardinals',
+   amm:'-105',hmm:'+105',aml:'+117',hml:'-117',
+   awp:51.1,hwp:48.9,avp:46.1,hvp:53.9,modelTotal:8.5,vegasOU:8.5},
   {a:'Arizona Diamondbacks',h:'Colorado Rockies',
-   amm:'-311',hmm:'+311', aml:'-108',hml:'+108',
-   awp:75.7,hwp:24.3,      avp:51.9,hvp:48.1,
-   modelTotal:12.4, vegasOU:12.5},
-
+   amm:'-228',hmm:'+228',aml:'-108',hml:'+108',
+   awp:69.5,hwp:30.5,avp:51.9,hvp:48.1,modelTotal:9.5,vegasOU:12.5},
   {a:'San Francisco Giants',h:'Athletics',
-   amm:'+136',hmm:'-136', aml:'+133',hml:'-133',
-   awp:42.3,hwp:57.7,      avp:42.9,hvp:57.1,
-   modelTotal:11.1, vegasOU:8.0},
-
+   amm:'+102',hmm:'-102',aml:'+133',hml:'-133',
+   awp:49.5,hwp:50.5,avp:42.9,hvp:57.1,modelTotal:9.9,vegasOU:8.0},
   {a:'Los Angeles Dodgers',h:'Los Angeles Angels',
-   amm:'-188',hmm:'+188', aml:'-138',hml:'+138',
-   awp:65.3,hwp:34.7,      avp:58.0,hvp:42.0,
-   modelTotal:9.8, vegasOU:8.5},
-
-  {a:'San Diego Padres',   h:'Seattle Mariners',
-   amm:'+108',hmm:'-108', aml:'+127',hml:'-127',
-   awp:48.1,hwp:51.9,      avp:44.1,hvp:55.9,
-   modelTotal:8.8, vegasOU:7.5},
+   amm:'-188',hmm:'+188',aml:'-138',hml:'+138',
+   awp:65.3,hwp:34.7,avp:58.0,hvp:42.0,modelTotal:9.8,vegasOU:8.5,note:'Prior run — R script truncation'},
+  {a:'San Diego Padres',h:'Seattle Mariners',
+   amm:'+108',hmm:'-108',aml:'+127',hml:'-127',
+   awp:48.1,hwp:51.9,avp:44.1,hvp:55.9,modelTotal:8.8,vegasOU:7.5,note:'Prior run — R script truncation'},
 ];
 
-// Compute value gaps & sort by biggest gap descending
 G.forEach(g=>{
   g.ag=+(g.awp-g.avp).toFixed(1);
   g.hg=+(g.hwp-g.hvp).toFixed(1);
@@ -216,19 +184,20 @@ function badge(g){
 const gc=v=>v>=2?'gp':v<=-2?'gn':'gz';
 const gf=v=>(v>0?'+':'')+v.toFixed(1)+'%';
 
-// Over/under direction hint
-function ouHint(model, vegas){
-  const diff = (model - vegas).toFixed(1);
-  if(Math.abs(diff) < 0.5) return '';
-  return diff > 0 ? ' · Model: OVER' : ' · Model: UNDER';
+function ouHint(model,vegas){
+  const diff=(model-vegas).toFixed(1);
+  if(Math.abs(diff)<0.5)return'';
+  return diff>0?' · Model: OVER':' · Model: UNDER';
 }
 
 const deck=document.getElementById('deck');
 G.forEach(g=>{
   const af=g.awp>g.hwp;
+  const noteHtml=g.note?`<div class="note-bar">⚠ ${g.note}</div>`:'';
   deck.innerHTML+=`
 <div class="card">
   <div class="ch">${s(g.a)} @ ${s(g.h)}</div>
+  ${noteHtml}
   <div class="cb">
     <div class="col${af?' fav':''}">
       <div class="sl">Away</div>
