@@ -202,22 +202,19 @@ function impliedProb(ml){
   return 100/(ml+100)*100;
 }
 function unitsForGap(gap){
-  // Only positive gaps qualify for picks. Negative gap = model agrees with Vegas → no edge.
-  if(gap <= 0) return 0;
-  if(gap >= 15) return 3.0;
-  if(gap >= 5)  return 2.0;
-  if(gap >= 3)  return 1.0;
-  if(gap >= 1)  return 0.5;
-  return 0;
+  // LOCKED 2026-05-20: no half units, minimum 4% gap to bet.
+  if(gap < 4)   return 0;
+  if(gap < 8)   return 1.0;
+  if(gap < 12)  return 2.0;
+  return 3.0;
 }
 
 const ICE_BADGE = '<span class="badge b0">&#10052; 0 Units</span>';
 function badge(gap){
   const u = unitsForGap(gap);
-  if(u===3)   return '<span class="badge b3">&#9733; 3 Units</span>';
-  if(u===2)   return '<span class="badge b2">&#9650; 2 Units</span>';
-  if(u===1)   return '<span class="badge b1">&#8593; 1 Unit</span>';
-  if(u===0.5) return '<span class="badge b05">&middot; 0.5 Units</span>';
+  if(u===3) return '<span class="badge b3">&#9733; 3 Units</span>';
+  if(u===2) return '<span class="badge b2">&#9650; 2 Units</span>';
+  if(u===1) return '<span class="badge b1">&#8593; 1 Unit</span>';
   return ICE_BADGE;
 }
 
