@@ -397,4 +397,23 @@ function renderRake(){
     yb.innerHTML = '';
     return;
   }
-  let html = `<div class="yest-hdr">Yesterday &middot; ${y.date} &middot; Net: ${y.day_net
+  let html = `<div class="yest-hdr">Yesterday &middot; ${y.date} &middot; Net: ${y.day_net >= 0 ? '+' : ''}${(y.day_net || 0).toFixed(2)}u</div>`;
+  const all = [...(y.ml_picks || []), ...(y.ou_picks || [])];
+  all.forEach(p => {
+    const outCls = p.status === 'won' ? 'won' : p.status === 'lost' ? 'lost' : p.status === 'push' ? 'push' : 'pending';
+    const out = p.status.toUpperCase();
+    const pickStr = p.pick_type === 'ML' ? `${s(p.pick_team)} ${fmtML(p.pick_ml)} <i>(${p.pick_units}u)</i>` : `${p.pick_side.toUpperCase()} ${p.vegas_ou}`;
+    const nu = p.net_units != null ? ` &middot; ${p.net_units >= 0 ? '+' : ''}${p.net_units.toFixed(2)}u` : '';
+    html += `<div class="yest-card">
+      <div class="yest-match">${s(p.away)} @ ${s(p.home)}</div>
+      <div class="yest-row">
+        <div class="yest-pick"><b>${p.pick_type}:</b> ${pickStr}</div>
+        <div class="yest-out ${outCls}">${out}${nu}</div>
+      </div>
+    </div>`;
+  });
+  yb.innerHTML = html;
+}
+</script>
+</body>
+</html>
