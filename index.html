@@ -41,9 +41,11 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .gn{color:#cc1111;}
 .gz{color:var(--muted);}
 .badge{display:inline-block;margin-top:9px;padding:4px 11px;border-radius:20px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.5px;}
+.b3{background:#5a2d8c;color:#fff;}
 .b2{background:var(--red);color:#fff;}
 .b1{background:#d46b00;color:#fff;}
 .b05{background:var(--navy);color:var(--cream);}
+.b0{background:#c5e0f0;color:#1a4d75;border:1px solid #88b8d5;}
 
 .tf{border-top:1px solid var(--border);padding:10px 14px;display:flex;justify-content:space-around;background:#f8f3e4;}
 .tf-col{text-align:center;}
@@ -55,7 +57,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .yo-box{border-top:1px solid var(--border);background:#eee4cd;padding:10px 14px;}
 .yo-hdr{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:7px;text-align:center;}
 .yo-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
-.yo-inp{padding:5px 6px;border:1px solid #bbb;border-radius:5px;background:#fff;font-size:.78rem;text-align:center;font-weight:700;font-family:inherit;color:var(--navy);}
+.yo-inp{width:100%;min-width:0;padding:5px 6px;border:1px solid #bbb;border-radius:5px;background:#fff;font-size:.78rem;text-align:center;font-weight:700;font-family:inherit;color:var(--navy);}
 .yo-inp::placeholder{color:#aaa;font-weight:400;font-style:italic;}
 .yo-result{font-size:.72rem;text-align:center;color:#555;min-height:18px;line-height:1.4;}
 .yo-result .pick{font-weight:800;color:var(--navy);}
@@ -200,19 +202,23 @@ function impliedProb(ml){
   return 100/(ml+100)*100;
 }
 function unitsForGap(gap){
-  const g = Math.abs(gap);
-  if(g>=5) return 2.0;
-  if(g>=3) return 1.0;
-  if(g>=1) return 0.5;
+  // Only positive gaps qualify for picks. Negative gap = model agrees with Vegas → no edge.
+  if(gap <= 0) return 0;
+  if(gap >= 15) return 3.0;
+  if(gap >= 5)  return 2.0;
+  if(gap >= 3)  return 1.0;
+  if(gap >= 1)  return 0.5;
   return 0;
 }
 
+const ICE_BADGE = '<span class="badge b0">&#10052; 0 Units</span>';
 function badge(gap){
   const u = unitsForGap(gap);
-  if(u===2) return '<span class="badge b2">&#9650; 2 Units</span>';
-  if(u===1) return '<span class="badge b1">&#8593; 1 Unit</span>';
+  if(u===3)   return '<span class="badge b3">&#9733; 3 Units</span>';
+  if(u===2)   return '<span class="badge b2">&#9650; 2 Units</span>';
+  if(u===1)   return '<span class="badge b1">&#8593; 1 Unit</span>';
   if(u===0.5) return '<span class="badge b05">&middot; 0.5 Units</span>';
-  return '';
+  return ICE_BADGE;
 }
 
 function ouHint(model, vegas){
@@ -223,6 +229,12 @@ function ouHint(model, vegas){
 
 function renderTodayCard(g){
   const af = g.awp >= g.hwp;
+  // VALUE-BASED pick: only the side with the larger POSITIVE value gap gets the badge.
+  // If both gaps are negative or zero, no badge anywhere (no pick).
+  const valueSide = g.ag > g.hg ? 'away' : 'home';
+  const valueGap = Math.max(g.ag, g.hg);
+  const showBadgeAway = valueSide === 'away' && valueGap > 0 && unitsForGap(valueGap) > 0;
+  const showBadgeHome = valueSide === 'home' && valueGap > 0 && unitsForGap(valueGap) > 0;
   const noteHtml = g.note ? `<div class="note-bar">&#9888; ${g.note}</div>` : '';
   return `
 <div class="card" data-game-pk="${g.game_pk}">
@@ -238,7 +250,7 @@ function renderTodayCard(g){
       <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.awp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.avp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.ag)}">${gf(g.ag)}</div></div>
-      ${af && unitsForGap(g.ag)>0 ? badge(g.ag) : ''}
+      ${showBadgeAway ? badge(g.ag) : ICE_BADGE}
     </div>
     <div class="col${af?'':' fav'}">
       <div class="sl">Home</div>
@@ -248,7 +260,7 @@ function renderTodayCard(g){
       <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.hwp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.hvp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.hg)}">${gf(g.hg)}</div></div>
-      ${!af && unitsForGap(g.hg)>0 ? badge(g.hg) : ''}
+      ${showBadgeHome ? badge(g.hg) : ICE_BADGE}
     </div>
   </div>
   <div class="tf">
@@ -293,12 +305,13 @@ function recalcYO(inp){
       const hImp = impliedProb(hml);
       const aGap = g.awp - aImp;
       const hGap = g.hwp - hImp;
-      const bestSide = aGap >= hGap ? 'away' : 'home';
+      // Only positive gaps count — pick whichever side has a positive edge (if any)
       const bestGap = Math.max(aGap, hGap);
+      const bestSide = aGap >= hGap ? 'away' : 'home';
       const u = unitsForGap(bestGap);
       const teamName = bestSide==='away' ? s(g.a) : s(g.h);
       if(u > 0){
-        parts.push(`<span class="pick">${teamName}</span> ML: gap <span class="${gc(bestGap)}">${gf(bestGap)}</span> &rarr; <span class="units">${u}u</span>`);
+        parts.push(`<span class="pick">${teamName}</span> ML: gap <span class="gp">+${bestGap.toFixed(1)}%</span> &rarr; <span class="units">${u}u</span>`);
       } else {
         parts.push(`No ML edge (best gap ${gf(bestGap)})`);
       }
@@ -384,23 +397,4 @@ function renderRake(){
     yb.innerHTML = '';
     return;
   }
-  let html = `<div class="yest-hdr">Yesterday &middot; ${y.date} &middot; Net: ${y.day_net >= 0 ? '+' : ''}${(y.day_net || 0).toFixed(2)}u</div>`;
-  const all = [...(y.ml_picks || []), ...(y.ou_picks || [])];
-  all.forEach(p => {
-    const outCls = p.status === 'won' ? 'won' : p.status === 'lost' ? 'lost' : p.status === 'push' ? 'push' : 'pending';
-    const out = p.status.toUpperCase();
-    const pickStr = p.pick_type === 'ML' ? `${s(p.pick_team)} ${fmtML(p.pick_ml)} <i>(${p.pick_units}u)</i>` : `${p.pick_side.toUpperCase()} ${p.vegas_ou}`;
-    const nu = p.net_units != null ? ` &middot; ${p.net_units >= 0 ? '+' : ''}${p.net_units.toFixed(2)}u` : '';
-    html += `<div class="yest-card">
-      <div class="yest-match">${s(p.away)} @ ${s(p.home)}</div>
-      <div class="yest-row">
-        <div class="yest-pick"><b>${p.pick_type}:</b> ${pickStr}</div>
-        <div class="yest-out ${outCls}">${out}${nu}</div>
-      </div>
-    </div>`;
-  });
-  yb.innerHTML = html;
-}
-</script>
-</body>
-</html>
+  let html = `<div class="yest-hdr">Yesterday &middot; ${y.date} &middot; Net: ${y.day_net
