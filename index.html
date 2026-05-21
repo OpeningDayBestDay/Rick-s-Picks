@@ -18,6 +18,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .hdr{background:var(--navy);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.35);}
 .hdr h1{color:var(--cream);font-size:1.75rem;font-weight:900;line-height:1;}
 .hdr sub{display:block;color:var(--red);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;}
+.hdr img{width:60px;height:60px;object-fit:contain;border-radius:8px;}
 .banner{background:var(--red);color:#fff;text-align:center;padding:9px 12px;font-size:.78rem;font-weight:700;}
 .date{text-align:center;padding:12px 12px 4px;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;opacity:.55;}
 .deck{padding:8px 12px 36px;display:flex;flex-direction:column;gap:14px;max-width:540px;margin:0 auto;}
@@ -135,6 +136,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
         <h1>Rick's Picks</h1>
         <sub>v17 MLB Prediction Model</sub>
       </div>
+      <img src="patrick.png" alt="Patrick">
     </div>
     <div class="banner" id="banner">Today's slate</div>
     <div class="date" id="date">Wednesday, May 20, 2026</div>
@@ -149,7 +151,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
     </div>
     <div class="rake-stats">
       <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ml-rec">0-0</div><div class="rake-stat-lbl">ML Record</div></div>
-      <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ml-wp">0%</div><div class="rake-stat-lbl">ML Win%</div></div>
+      <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ml-units">+0.00</div><div class="rake-stat-lbl">ML Net Units</div></div>
       <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ou-rec">0-0</div><div class="rake-stat-lbl">O/U Record</div></div>
       <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ou-wp">0%</div><div class="rake-stat-lbl">O/U Win%</div></div>
     </div>
@@ -176,7 +178,7 @@ if(sessionStorage.getItem('rp')==='1'){
 }
 
 // Data blocks rendered by build_dashboard.py
-const G = [{"game_pk": 822977, "a": "Baltimore Orioles", "h": "Tampa Bay Rays", "asp": "Shane Baz", "hsp": "Steven Matz", "amm": -100, "hmm": 100, "aml": -100, "hml": -115, "awp": 50.09, "hwp": 49.91, "avp": 50.0, "hvp": 53.48837209302325, "modelTotal": 7.7, "vegasOU": null}, {"game_pk": 823057, "a": "Pittsburgh Pirates", "h": "St. Louis Cardinals", "asp": "Carmen Mlodzinski", "hsp": "Michael McGreevy", "amm": 190, "hmm": -190, "aml": 100, "hml": -120, "awp": 34.44, "hwp": 65.56, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 9.09, "vegasOU": null}, {"game_pk": 823134, "a": "Chicago White Sox", "h": "Seattle Mariners", "asp": "Sean Burke", "hsp": "Emerson Hancock", "amm": 107, "hmm": -107, "aml": 118, "hml": -140, "awp": 48.36, "hwp": 51.64, "avp": 45.87155963302752, "hvp": 58.333333333333336, "modelTotal": 6.09, "vegasOU": null}, {"game_pk": 823299, "a": "Los Angeles Dodgers", "h": "San Diego Padres", "asp": "Shohei Ohtani", "hsp": "Randy V\u00e1squez", "amm": -119, "hmm": 119, "aml": -190, "hml": 158, "awp": 54.4, "hwp": 45.6, "avp": 65.51724137931035, "hvp": 38.759689922480625, "modelTotal": 7.7, "vegasOU": null}, {"game_pk": 823462, "a": "Cincinnati Reds", "h": "Philadelphia Phillies", "asp": "Andrew Abbott", "hsp": "Aaron Nola", "amm": 107, "hmm": -107, "aml": 130, "hml": -155, "awp": 48.36, "hwp": 51.64, "avp": 43.47826086956522, "hvp": 60.78431372549019, "modelTotal": 8.58, "vegasOU": null}, {"game_pk": 823703, "a": "Houston Astros", "h": "Minnesota Twins", "asp": "Mike Burrows", "hsp": "Joe Ryan", "amm": -100, "hmm": 100, "aml": 130, "hml": -155, "awp": 50.09, "hwp": 49.91, "avp": 43.47826086956522, "hvp": 60.78431372549019, "modelTotal": 6.58, "vegasOU": null}, {"game_pk": 823866, "a": "Atlanta Braves", "h": "Miami Marlins", "asp": "Chris Sale", "hsp": "Janson Junk", "amm": -191, "hmm": 191, "aml": -190, "hml": 158, "awp": 65.62, "hwp": 34.38, "avp": 65.51724137931035, "hvp": 38.759689922480625, "modelTotal": 10.83, "vegasOU": null}, {"game_pk": 824032, "a": "Athletics", "h": "Los Angeles Angels", "asp": "Aaron Civale", "hsp": "Jack Kochanowicz", "amm": -112, "hmm": 112, "aml": -130, "hml": 110, "awp": 52.81, "hwp": 47.19, "avp": 56.52173913043478, "hvp": 47.61904761904761, "modelTotal": 10.72, "vegasOU": null}, {"game_pk": 824111, "a": "Boston Red Sox", "h": "Kansas City Royals", "asp": "Connelly Early", "hsp": "Michael Wacha", "amm": 107, "hmm": -107, "aml": 100, "hml": -120, "awp": 48.36, "hwp": 51.64, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 7.27, "vegasOU": null}, {"game_pk": 824355, "a": "Texas Rangers", "h": "Colorado Rockies", "asp": "Jack Leiter", "hsp": "Kyle Freeland", "amm": 102, "hmm": -102, "aml": -125, "hml": 105, "awp": 49.59, "hwp": 50.41, "avp": 55.55555555555556, "hvp": 48.78048780487805, "modelTotal": 9.8, "vegasOU": null}, {"game_pk": 824678, "a": "Milwaukee Brewers", "h": "Chicago Cubs", "asp": "Kyle Harrison", "hsp": "Edward Cabrera", "amm": 188, "hmm": -188, "aml": 100, "hml": -120, "awp": 34.78, "hwp": 65.22, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 7.98, "vegasOU": null}, {"game_pk": 825084, "a": "San Francisco Giants", "h": "Arizona Diamondbacks", "asp": "Tyler Mahle", "hsp": "Merrill Kelly", "amm": 107, "hmm": -107, "aml": 100, "hml": -120, "awp": 48.36, "hwp": 51.64, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 8.42, "vegasOU": null}];
+const G = [{"game_pk": 822977, "a": "Baltimore Orioles", "h": "Tampa Bay Rays", "asp": "Shane Baz", "hsp": "Steven Matz", "amm": -100, "hmm": 100, "aml": -100, "hml": -115, "awp": 50.09, "hwp": 49.91, "avp": 50.0, "hvp": 53.48837209302325, "modelTotal": 7.7, "vegasOU": null}, {"game_pk": 823057, "a": "Pittsburgh Pirates", "h": "St. Louis Cardinals", "asp": "Carmen Mlodzinski", "hsp": "Michael McGreevy", "amm": 190, "hmm": -190, "aml": 100, "hml": -120, "awp": 34.44, "hwp": 65.56, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 9.09, "vegasOU": null}, {"game_pk": 823134, "a": "Chicago White Sox", "h": "Seattle Mariners", "asp": "Sean Burke", "hsp": "Emerson Hancock", "amm": 107, "hmm": -107, "aml": 118, "hml": -140, "awp": 48.36, "hwp": 51.64, "avp": 45.87155963302752, "hvp": 58.333333333333336, "modelTotal": 6.08, "vegasOU": null}, {"game_pk": 823299, "a": "Los Angeles Dodgers", "h": "San Diego Padres", "asp": "Shohei Ohtani", "hsp": "Randy V\u00e1squez", "amm": -119, "hmm": 119, "aml": -190, "hml": 158, "awp": 54.4, "hwp": 45.6, "avp": 65.51724137931035, "hvp": 38.759689922480625, "modelTotal": 7.69, "vegasOU": null}, {"game_pk": 823462, "a": "Cincinnati Reds", "h": "Philadelphia Phillies", "asp": "Andrew Abbott", "hsp": "Aaron Nola", "amm": 107, "hmm": -107, "aml": 130, "hml": -155, "awp": 48.36, "hwp": 51.64, "avp": 43.47826086956522, "hvp": 60.78431372549019, "modelTotal": 8.58, "vegasOU": null}, {"game_pk": 823703, "a": "Houston Astros", "h": "Minnesota Twins", "asp": "Mike Burrows", "hsp": "Joe Ryan", "amm": -100, "hmm": 100, "aml": 130, "hml": -155, "awp": 50.09, "hwp": 49.91, "avp": 43.47826086956522, "hvp": 60.78431372549019, "modelTotal": 7.38, "vegasOU": null}, {"game_pk": 823866, "a": "Atlanta Braves", "h": "Miami Marlins", "asp": "Chris Sale", "hsp": "Janson Junk", "amm": -191, "hmm": 191, "aml": -190, "hml": 158, "awp": 65.62, "hwp": 34.38, "avp": 65.51724137931035, "hvp": 38.759689922480625, "modelTotal": 10.87, "vegasOU": null}, {"game_pk": 824032, "a": "Athletics", "h": "Los Angeles Angels", "asp": "Aaron Civale", "hsp": "Jack Kochanowicz", "amm": -112, "hmm": 112, "aml": -130, "hml": 110, "awp": 52.81, "hwp": 47.19, "avp": 56.52173913043478, "hvp": 47.61904761904761, "modelTotal": 10.55, "vegasOU": null}, {"game_pk": 824111, "a": "Boston Red Sox", "h": "Kansas City Royals", "asp": "Connelly Early", "hsp": "Michael Wacha", "amm": 114, "hmm": -114, "aml": 100, "hml": -120, "awp": 46.7, "hwp": 53.3, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 6.91, "vegasOU": null}, {"game_pk": 824355, "a": "Texas Rangers", "h": "Colorado Rockies", "asp": "Jack Leiter", "hsp": "Kyle Freeland", "amm": 102, "hmm": -102, "aml": -125, "hml": 105, "awp": 49.59, "hwp": 50.41, "avp": 55.55555555555556, "hvp": 48.78048780487805, "modelTotal": 9.89, "vegasOU": null}, {"game_pk": 824678, "a": "Milwaukee Brewers", "h": "Chicago Cubs", "asp": "Kyle Harrison", "hsp": "Edward Cabrera", "amm": 181, "hmm": -181, "aml": 100, "hml": -120, "awp": 35.61, "hwp": 64.39, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 7.8, "vegasOU": null}, {"game_pk": 825084, "a": "San Francisco Giants", "h": "Arizona Diamondbacks", "asp": "Tyler Mahle", "hsp": "Merrill Kelly", "amm": 103, "hmm": -103, "aml": 100, "hml": -120, "awp": 49.22, "hwp": 50.78, "avp": 50.0, "hvp": 54.54545454545454, "modelTotal": 8.32, "vegasOU": null}];
 const NO_PICK = [{"a": "Cleveland Guardians", "h": "Detroit Tigers", "reason": "HOME starter TBD", "aml": null, "hml": null, "ou": null}, {"a": "Toronto Blue Jays", "h": "New York Yankees", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Trey Yesavage or Cam Schlittler", "aml": null, "hml": null, "ou": null}, {"a": "New York Mets", "h": "Washington Nationals", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Zach Thornton or Zack Littell", "aml": null, "hml": null, "ou": null}];
 const LEDGER = {"lifetime": {"ml_net_units": 0, "ml_record": "0-0", "ml_win_pct": 0.0, "ou_record": "0-0", "ou_win_pct": 0.0, "total_picks": 0}, "monthly": [], "yesterday": {"date": null, "ml_picks": [], "ou_picks": [], "day_net": 0}};
 
@@ -367,7 +369,10 @@ function renderRake(){
   lifeSubEl.textContent = lt.total_picks ? `${lt.total_picks} picks tracked` : 'No picks graded yet';
 
   document.getElementById('rake-ml-rec').textContent = lt.ml_record || '0-0';
-  document.getElementById('rake-ml-wp').textContent = (lt.ml_win_pct || 0).toFixed(0) + '%';
+  const mlu = lt.ml_net_units || 0;
+  const mluEl = document.getElementById('rake-ml-units');
+  mluEl.textContent = (mlu >= 0 ? '+' : '') + mlu.toFixed(2);
+  mluEl.className = 'rake-stat-val ' + (mlu > 0 ? 'pos' : mlu < 0 ? 'neg' : 'neu');
   document.getElementById('rake-ou-rec').textContent = lt.ou_record || '0-0';
   document.getElementById('rake-ou-wp').textContent = (lt.ou_win_pct || 0).toFixed(0) + '%';
 
@@ -394,18 +399,27 @@ function renderRake(){
     yb.innerHTML = '';
     return;
   }
-  let html = `<div class="yest-hdr">Yesterday &middot; ${y.date} &middot; Net: ${y.day_net >= 0 ? '+' : ''}${(y.day_net || 0).toFixed(2)}u</div>`;
+  let html = `<div class="yest-hdr">Yesterday's Results &middot; ${y.date} &middot; Net: ${y.day_net >= 0 ? '+' : ''}${(y.day_net || 0).toFixed(2)}u</div>`;
   const all = [...(y.ml_picks || []), ...(y.ou_picks || [])];
+  // Sort by units bet descending (biggest plays first); ties stable
+  all.sort((a, b) => (b.pick_units || 0) - (a.pick_units || 0));
   all.forEach(p => {
     const outCls = p.status === 'won' ? 'won' : p.status === 'lost' ? 'lost' : p.status === 'push' ? 'push' : 'pending';
     const out = p.status.toUpperCase();
-    const pickStr = p.pick_type === 'ML' ? `${s(p.pick_team)} ${fmtML(p.pick_ml)} <i>(${p.pick_units}u)</i>` : `${p.pick_side.toUpperCase()} ${p.vegas_ou}`;
-    const nu = p.net_units != null ? ` &middot; ${p.net_units >= 0 ? '+' : ''}${p.net_units.toFixed(2)}u` : '';
+    const hs = p.actual_home_score != null ? p.actual_home_score : '?';
+    const as_ = p.actual_away_score != null ? p.actual_away_score : '?';
+    const scoreStr = `${s(p.away)} ${as_} @ ${s(p.home)} ${hs}`;
+    const pickStr = p.pick_type === 'ML'
+      ? `${s(p.pick_team)} ${fmtML(p.pick_ml)} &middot; <b>${p.pick_units}u</b>`
+      : `${p.pick_side.toUpperCase()} ${p.vegas_ou}`;
+    const nu = p.net_units != null
+      ? `<span class="yest-out ${outCls}">${out} ${p.net_units >= 0 ? '+' : ''}${p.net_units.toFixed(2)}u</span>`
+      : `<span class="yest-out ${outCls}">${out}</span>`;
     html += `<div class="yest-card">
-      <div class="yest-match">${s(p.away)} @ ${s(p.home)}</div>
+      <div class="yest-match">${scoreStr}</div>
       <div class="yest-row">
-        <div class="yest-pick"><b>${p.pick_type}:</b> ${pickStr}</div>
-        <div class="yest-out ${outCls}">${out}${nu}</div>
+        <div class="yest-pick">${p.pick_type}: ${pickStr}</div>
+        ${nu}
       </div>
     </div>`;
   });
