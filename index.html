@@ -204,10 +204,10 @@ function impliedProb(ml){
   return 100/(ml+100)*100;
 }
 function unitsForGap(gap){
-  // LOCKED 2026-05-20: no half units, minimum 4% gap to bet.
-  if(gap < 4)   return 0;
-  if(gap < 8)   return 1.0;
-  if(gap < 12)  return 2.0;
+  // v18 LOCKED 2026-05-22: no half units, minimum 3% gap to bet.
+  if(gap < 3)   return 0;
+  if(gap < 6)   return 1.0;
+  if(gap < 10)  return 2.0;
   return 3.0;
 }
 
