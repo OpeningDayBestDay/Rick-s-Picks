@@ -27,6 +27,8 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ch{background:var(--navy);color:var(--cream);padding:9px 14px;font-size:.82rem;font-weight:800;text-align:center;text-transform:uppercase;letter-spacing:.8px;}
 .sp-bar{background:#1a3a6a;color:#b0c8e8;text-align:center;padding:4px 10px;font-size:.65rem;font-weight:600;letter-spacing:.3px;}
 .note-bar{background:#7a5200;color:#ffe9a0;text-align:center;padding:4px 10px;font-size:.68rem;font-weight:700;}
+.dh-tag{background:repeating-linear-gradient(45deg,var(--red),var(--red) 10px,#b01420 10px,#b01420 20px);color:#fff;text-align:center;padding:7px 10px;font-size:.78rem;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;text-shadow:0 1px 2px rgba(0,0,0,.4);}
+.skip-dh-tag{background:repeating-linear-gradient(45deg,var(--red),var(--red) 10px,#b01420 10px,#b01420 20px);color:#fff;text-align:center;padding:5px 10px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;border-radius:8px 8px 0 0;margin:-9px -14px 6px -14px;}
 
 .cb{display:grid;grid-template-columns:1fr 1fr;}
 .col{padding:13px 11px;}
@@ -134,12 +136,12 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
     <div class="hdr">
       <div>
         <h1>Rick's Picks</h1>
-        <sub>v17 MLB Prediction Model</sub>
+        <sub>v19 MLB Prediction Model</sub>
       </div>
       <img src="patrick.png" alt="Patrick">
     </div>
     <div class="banner" id="banner">Today's slate</div>
-    <div class="date" id="date">Friday, May 22, 2026</div>
+    <div class="date" id="date">Saturday, May 23, 2026</div>
     <div class="deck" id="deck"></div>
   </div>
 
@@ -178,9 +180,9 @@ if(sessionStorage.getItem('rp')==='1'){
 }
 
 // Data blocks rendered by build_dashboard.py
-const G = [{"game_pk": 824679, "a": "Houston Astros", "h": "Chicago Cubs", "asp": "Spencer Arrighetti", "hsp": "Jameson Taillon", "amm": 242, "hmm": -242, "aml": 130, "hml": -155, "awp": 29.27, "hwp": 70.73, "avp": 43.47826086956522, "hvp": 60.78431372549019, "modelTotal": 8.26, "vegasOU": 7.0}, {"game_pk": 822816, "a": "Pittsburgh Pirates", "h": "Toronto Blue Jays", "asp": "Bubba Chandler", "hsp": "Kevin Gausman", "amm": 196, "hmm": -196, "aml": 135, "hml": -160, "awp": 33.74, "hwp": 66.26, "avp": 42.5531914893617, "hvp": 61.53846153846154, "modelTotal": 7.64, "vegasOU": 8.0}, {"game_pk": 823461, "a": "Cleveland Guardians", "h": "Philadelphia Phillies", "asp": "Gavin Williams", "hsp": "Cristopher S\u00e1nchez", "amm": 212, "hmm": -212, "aml": 158, "hml": -190, "awp": 32.06, "hwp": 67.94, "avp": 38.759689922480625, "hvp": 65.51724137931035, "modelTotal": 8.01, "vegasOU": 6.5}, {"game_pk": 824110, "a": "Seattle Mariners", "h": "Kansas City Royals", "asp": "Logan Gilbert", "hsp": "Noah Cameron", "amm": -108, "hmm": 108, "aml": -115, "hml": -105, "awp": 51.83, "hwp": 48.17, "avp": 53.48837209302325, "hvp": 51.21951219512195, "modelTotal": 7.8, "vegasOU": 8.0}, {"game_pk": 823298, "a": "Athletics", "h": "San Diego Padres", "asp": "Jeffrey Springs", "hsp": "Walker Buehler", "amm": 105, "hmm": -105, "aml": -105, "hml": -115, "awp": 48.85, "hwp": 51.15, "avp": 51.21951219512195, "hvp": 53.48837209302325, "modelTotal": 7.8, "vegasOU": 7.5}, {"game_pk": 825082, "a": "Colorado Rockies", "h": "Arizona Diamondbacks", "asp": "Tomoyuki Sugano", "hsp": "Michael Soroka", "amm": 168, "hmm": -168, "aml": 192, "hml": -235, "awp": 37.38, "hwp": 62.62, "avp": 34.24657534246575, "hvp": 70.1492537313433, "modelTotal": 9.46, "vegasOU": 9.0}];
-const NO_PICK = [{"a": "Chicago White Sox", "h": "San Francisco Giants", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Davis Martin or Trevor McDonald", "aml": -115, "hml": -105, "ou": 7.5}, {"a": "Tampa Bay Rays", "h": "New York Yankees", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Nick Martinez or Gerrit Cole", "aml": 118, "hml": -140, "ou": 7.5}, {"a": "Los Angeles Dodgers", "h": "Milwaukee Brewers", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Justin Wrobleski or Logan Henderson", "aml": -110, "hml": -110, "ou": 8.5}, {"a": "New York Mets", "h": "Miami Marlins", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Tobias Myers or Eury P\u00e9rez", "aml": -105, "hml": -115, "ou": 8.0}, {"a": "Texas Rangers", "h": "Los Angeles Angels", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Jacob deGrom or Grayson Rodriguez", "aml": -165, "hml": 140, "ou": 7.5}, {"a": "Minnesota Twins", "h": "Boston Red Sox", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Connor Prielipp or Payton Tolle", "aml": 130, "hml": -155, "ou": 7.5}, {"a": "Detroit Tigers", "h": "Baltimore Orioles", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Jack Flaherty or Keegan Akin", "aml": 118, "hml": -140, "ou": 8.0}, {"a": "Washington Nationals", "h": "Atlanta Braves", "reason": "SP eligibility (career_ip < 40 or avg_ip/start < 3) \u2014 Richard Lovelady or Bryce Elder", "aml": 162, "hml": -195, "ou": 8.5}];
-const LEDGER = {"lifetime": {"ml_net_units": -6.7, "ml_record": "1-5", "ml_win_pct": 16.7, "ou_record": "2-2", "ou_win_pct": 50.0, "total_picks": 10}, "monthly": [{"month": "2026-05", "ml_net_units": -6.7, "ml_record": "1-5", "ml_win_pct": 16.7, "ou_record": "2-2", "ou_win_pct": 50.0}], "yesterday": {"date": "2026-05-21", "ml_picks": [{"date": "2026-05-21", "game_pk": 823056, "away": "Pittsburgh Pirates", "home": "St. Louis Cardinals", "away_sp": "Braxton Ashcraft", "home_sp": "Dustin May", "pick_type": "ML", "pick_side": "home", "pick_team": "St. Louis Cardinals", "pick_ml": 105, "pick_units": 2.0, "model_wp": 59.5, "vegas_wp": 48.78, "value_gap": 10.72, "vegas_implied": 0.4878, "status": "lost", "logged_at": "2026-05-21T14:50:32", "actual_home_score": 2, "actual_away_score": 6, "net_units": -2.0, "graded_at": "2026-05-22T11:20:32"}], "ou_picks": [{"date": "2026-05-21", "game_pk": 823056, "away": "Pittsburgh Pirates", "home": "St. Louis Cardinals", "away_sp": "Braxton Ashcraft", "home_sp": "Dustin May", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 8.99, "vegas_ou": 7.5, "ou_gap": 1.49, "status": "won", "logged_at": "2026-05-21T14:50:32", "actual_home_score": 2, "actual_away_score": 6, "net_units": 0.0, "graded_at": "2026-05-22T11:20:32"}, {"date": "2026-05-21", "game_pk": 824274, "away": "Cleveland Guardians", "home": "Detroit Tigers", "away_sp": "Joey Cantillo", "home_sp": "Casey Mize", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 8.35, "vegas_ou": 7.0, "ou_gap": 1.35, "status": "lost", "logged_at": "2026-05-21T14:50:32", "actual_home_score": 1, "actual_away_score": 3, "net_units": 0.0, "graded_at": "2026-05-22T11:20:32"}, {"date": "2026-05-21", "game_pk": 822733, "away": "New York Mets", "home": "Washington Nationals", "away_sp": "David Peterson", "home_sp": "Cade Cavalli", "pick_type": "OU", "pick_side": "over", "pick_team": "over", "pick_units": 0.0, "model_total": 9.49, "vegas_ou": 8.0, "value_gap": 1.4900000000000002, "status": "lost", "logged_at": "2026-05-21T18:24:02", "actual_home_score": 1, "actual_away_score": 2, "net_units": 0.0, "graded_at": "2026-05-22T11:20:32"}, {"date": "2026-05-21", "game_pk": 823864, "away": "Atlanta Braves", "home": "Miami Marlins", "away_sp": "Spencer Strider", "home_sp": "Sandy Alcantara", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 9.62, "vegas_ou": 7.5, "ou_gap": 2.119999999999999, "status": "won", "logged_at": "2026-05-21T20:30:18", "actual_home_score": 3, "actual_away_score": 9, "net_units": 0.0, "graded_at": "2026-05-22T11:20:32"}], "day_net": -2.0}};
+const G = [];
+const NO_PICK = [{"a": "Waiting for", "h": "today's slate", "reason": "Run /TODAYS_GAMES once Pat refreshes the schedule and lineups are posted.", "aml": null, "hml": null, "ou": null}];
+const LEDGER = {"lifetime": {"ml_net_units": -6.15, "ml_record": "3-6", "ml_win_pct": 33.3, "ou_record": "2-4", "ou_win_pct": 33.3, "total_picks": 15}, "monthly": [{"month": "2026-05", "ml_net_units": -6.15, "ml_record": "3-6", "ml_win_pct": 33.3, "ou_record": "2-4", "ou_win_pct": 33.3}], "yesterday": {"date": "2026-05-22", "ml_picks": [{"date": "2026-05-22", "game_pk": 824679, "away": "Houston Astros", "home": "Chicago Cubs", "away_sp": "Spencer Arrighetti", "home_sp": "Jameson Taillon", "pick_type": "ML", "pick_side": "home", "pick_team": "Chicago Cubs", "pick_ml": -155, "pick_units": 2.0, "model_wp": 70.73, "vegas_wp": 60.78, "value_gap": 9.95, "vegas_implied": 0.6078, "status": "lost", "logged_at": "2026-05-22T17:31:20", "actual_home_score": 2, "actual_away_score": 4, "net_units": -2.0, "graded_at": "2026-05-23T11:11:21"}, {"date": "2026-05-22", "game_pk": 822816, "away": "Pittsburgh Pirates", "home": "Toronto Blue Jays", "away_sp": "Bubba Chandler", "home_sp": "Kevin Gausman", "pick_type": "ML", "pick_side": "home", "pick_team": "Toronto Blue Jays", "pick_ml": -160, "pick_units": 1.0, "model_wp": 66.26, "vegas_wp": 61.54, "value_gap": 4.72, "vegas_implied": 0.6154, "status": "won", "logged_at": "2026-05-22T21:20:23", "actual_home_score": 6, "actual_away_score": 2, "net_units": 0.625, "graded_at": "2026-05-23T11:11:21"}, {"date": "2026-05-22", "game_pk": 825082, "away": "Colorado Rockies", "home": "Arizona Diamondbacks", "away_sp": "Tomoyuki Sugano", "home_sp": "Michael Soroka", "pick_type": "ML", "pick_side": "away", "pick_team": "Colorado Rockies", "pick_ml": 192, "pick_units": 1.0, "model_wp": 37.38, "vegas_wp": 34.25, "value_gap": 3.13, "vegas_implied": 0.3425, "status": "won", "logged_at": "2026-05-23T01:25:11", "actual_home_score": 2, "actual_away_score": 3, "net_units": 1.92, "graded_at": "2026-05-23T11:11:21"}], "ou_picks": [{"date": "2026-05-22", "game_pk": 824679, "away": "Houston Astros", "home": "Chicago Cubs", "away_sp": "Spencer Arrighetti", "home_sp": "Jameson Taillon", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 8.26, "vegas_ou": 7.0, "ou_gap": 1.26, "status": "lost", "logged_at": "2026-05-22T17:31:20", "actual_home_score": 2, "actual_away_score": 4, "net_units": 0.0, "graded_at": "2026-05-23T11:11:21"}, {"date": "2026-05-22", "game_pk": 823461, "away": "Cleveland Guardians", "home": "Philadelphia Phillies", "away_sp": "Gavin Williams", "home_sp": "Cristopher S\u00e1nchez", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 8.01, "vegas_ou": 6.5, "ou_gap": 1.51, "status": "lost", "logged_at": "2026-05-22T21:20:23", "actual_home_score": 0, "actual_away_score": 1, "net_units": 0.0, "graded_at": "2026-05-23T11:11:21"}], "day_net": 0.54}};
 
 const SH={
   'Arizona Diamondbacks':'D-Backs','Atlanta Braves':'Braves','Baltimore Orioles':'Orioles',
@@ -235,8 +237,10 @@ function renderTodayCard(g){
   const showBadgeAway = valueSide === 'away' && valueGap > 0 && unitsForGap(valueGap) > 0;
   const showBadgeHome = valueSide === 'home' && valueGap > 0 && unitsForGap(valueGap) > 0;
   const noteHtml = g.note ? `<div class="note-bar">&#9888; ${g.note}</div>` : '';
+  const dhBadge = g.gameNum ? `<div class="dh-tag">&#9889; Game ${g.gameNum} of ${g.dhTotal || 2} (Doubleheader) &#9889;</div>` : '';
   return `
 <div class="card" data-game-pk="${g.game_pk}">
+  ${dhBadge}
   <div class="ch">${s(g.a)} @ ${s(g.h)}</div>
   <div class="sp-bar">${g.asp} vs ${g.hsp}</div>
   ${noteHtml}
@@ -331,13 +335,14 @@ function recalcYO(inp){
   res.innerHTML = parts.join('<br>') || 'Enter your book\'s lines above';
 }
 
-// Sort games by max abs value gap (best edges first)
+// Compute per-side value gaps (used by badge rendering).
+// Game ORDER is set server-side in build_dashboard.py by published_projections.json
+// `locked_at` timestamp — oldest first, newest at the bottom — so customers
+// don't miss a late addition slipped into the middle. DO NOT re-sort here.
 G.forEach(g => {
   g.ag = +(g.awp - g.avp).toFixed(1);
   g.hg = +(g.hwp - g.hvp).toFixed(1);
-  g.mx = Math.max(Math.abs(g.ag), Math.abs(g.hg));
 });
-G.sort((a,b) => b.mx - a.mx);
 
 const deck = document.getElementById('deck');
 deck.innerHTML = G.map(renderTodayCard).join('');
@@ -346,7 +351,8 @@ if(NO_PICK && NO_PICK.length){
   deck.innerHTML += '<div class="skip-hdr">&#9940; No Pick</div>';
   NO_PICK.forEach(np => {
     const veg = (np.aml || np.hml) ? `<div class="skip-vegas">Vegas: ${s(np.a)} ${fmtML(np.aml)} &middot; ${s(np.h)} ${fmtML(np.hml)} &middot; O/U ${np.ou}</div>` : '';
-    deck.innerHTML += `<div class="skip-card"><b>${s(np.a)} @ ${s(np.h)}</b><div class="skip-reason">${np.reason}</div>${veg}</div>`;
+    const npDh = np.gameNum ? `<div class="skip-dh-tag">&#9889; Game ${np.gameNum} of ${np.dhTotal || 2} (Doubleheader) &#9889;</div>` : '';
+    deck.innerHTML += `<div class="skip-card">${npDh}<b>${s(np.a)} @ ${s(np.h)}</b><div class="skip-reason">${np.reason}</div>${veg}</div>`;
   });
 }
 
