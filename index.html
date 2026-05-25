@@ -163,9 +163,8 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       </div>
     </div>
     <div class="rake-stats">
-      <div class="rake-stat"><div class="rake-stat-val neu" id="rake-streak">0</div><div class="rake-stat-lbl">Pos-Day Streak</div></div>
+      <div class="rake-stat"><div class="rake-stat-val neu" id="rake-streak">0</div><div class="rake-stat-lbl">Positive Day Streak</div></div>
       <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ml-rec">0-0</div><div class="rake-stat-lbl">ML Record</div></div>
-      <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ml-units">+0.00</div><div class="rake-stat-lbl">ML Net Units</div></div>
       <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ou-rec">0-0</div><div class="rake-stat-lbl">O/U Record</div></div>
       <div class="rake-stat"><div class="rake-stat-val neu" id="rake-ou-wp">0%</div><div class="rake-stat-lbl">O/U Win%</div></div>
     </div>
@@ -235,8 +234,11 @@ function badge(gap){
 }
 
 function ouHint(model, vegas){
-  const diff = +(model-vegas).toFixed(1);
-  if(Math.abs(diff)<1.0) return '';
+  // Use RAW diff (no rounding) to match generate_picks.py's >1.0 threshold exactly.
+  // Pre-fix bug: +(model-vegas).toFixed(1) rounded 0.96 -> 1.0, which then PASSED
+  // the < 1.0 check and showed "Model: OVER" when no O/U pick was actually logged.
+  const diff = model - vegas;
+  if(Math.abs(diff) <= 1.0) return '';
   return diff>0?' &middot; Model: OVER':' &middot; Model: UNDER';
 }
 
@@ -386,7 +388,7 @@ function renderRake(){
   lifeEl.className = 'rake-hero-val ' + (netLT > 0 ? 'pos' : netLT < 0 ? 'neg' : '');
   lifeSubEl.textContent = lt.total_picks ? `${lt.total_picks} picks tracked` : 'No picks graded yet';
 
-  // NEW 2026-05-25: Growth % + Pos-Day Streak
+  // NEW 2026-05-25: Growth % + Positive Day Streak
   const gainEl = document.getElementById('rake-gain');
   const gainPct = (lt.gain_pct !== undefined) ? lt.gain_pct : 0.0;
   gainEl.textContent = (gainPct >= 0 ? '+' : '') + gainPct.toFixed(2) + '%';
@@ -400,10 +402,6 @@ function renderRake(){
   streakEl.className = 'rake-stat-val ' + (streak > 0 ? 'pos' : 'neu');
 
   document.getElementById('rake-ml-rec').textContent = lt.ml_record || '0-0';
-  const mlu = lt.ml_net_units || 0;
-  const mluEl = document.getElementById('rake-ml-units');
-  mluEl.textContent = (mlu >= 0 ? '+' : '') + mlu.toFixed(2);
-  mluEl.className = 'rake-stat-val ' + (mlu > 0 ? 'pos' : mlu < 0 ? 'neg' : 'neu');
   document.getElementById('rake-ou-rec').textContent = lt.ou_record || '0-0';
   document.getElementById('rake-ou-wp').textContent = (lt.ou_win_pct || 0).toFixed(0) + '%';
 
@@ -459,4 +457,4 @@ function renderRake(){
 </script>
 </body>
 </html>
-b.innerHTML
+                                                                                                                                 
