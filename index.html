@@ -191,8 +191,8 @@ if(sessionStorage.getItem('rp')==='1'){
 }
 
 // Data blocks rendered by build_dashboard.py
-const G = [];
-const NO_PICK = [{"a": "Waiting for", "h": "today's slate", "reason": "Run /TODAYS_GAMES once Pat refreshes the schedule and lineups are posted.", "aml": null, "hml": null, "ou": null}];
+const G = [{"game_pk": 823624, "a": "Cincinnati Reds", "h": "New York Mets", "asp": "Chase Burns", "hsp": "David Peterson", "amm": 101, "hmm": -101, "aml": -125, "hml": 105, "awp": 49.7, "hwp": 50.3, "avp": 55.55555555555556, "hvp": 48.78048780487805, "modelTotal": 8.57, "vegasOU": 7.5}, {"game_pk": 823785, "a": "St. Louis Cardinals", "h": "Milwaukee Brewers", "asp": "Michael McGreevy", "hsp": "Kyle Harrison", "amm": 174, "hmm": -174, "aml": 158, "hml": -190, "awp": 36.48, "hwp": 63.52, "avp": 38.759689922480625, "hvp": 65.51724137931035, "modelTotal": 8.34, "vegasOU": 8.0}, {"game_pk": 824275, "a": "Los Angeles Angels", "h": "Detroit Tigers", "asp": "Jack Kochanowicz", "hsp": "Keider Montero", "amm": 180, "hmm": -180, "aml": 115, "hml": -135, "awp": 35.68, "hwp": 64.32, "avp": 46.51162790697674, "hvp": 57.446808510638306, "modelTotal": 7.85, "vegasOU": 9.0}, {"game_pk": 824434, "a": "Washington Nationals", "h": "Cleveland Guardians", "asp": "Cade Cavalli", "hsp": "Joey Cantillo", "amm": 134, "hmm": -134, "aml": 110, "hml": -130, "awp": 42.74, "hwp": 57.26, "avp": 47.61904761904761, "hvp": 56.52173913043478, "modelTotal": 7.99, "vegasOU": 7.5}, {"game_pk": 824597, "a": "Minnesota Twins", "h": "Chicago White Sox", "asp": "Joe Ryan", "hsp": "Sean Burke", "amm": 104, "hmm": -104, "aml": -115, "hml": -105, "awp": 48.98, "hwp": 51.02, "avp": 53.48837209302325, "hvp": 51.21951219512195, "modelTotal": 8.44, "vegasOU": 7.5}, {"game_pk": 824758, "a": "Atlanta Braves", "h": "Boston Red Sox", "asp": "Spencer Strider", "hsp": "Ranger Suarez", "amm": 134, "hmm": -134, "aml": -110, "hml": -110, "awp": 42.74, "hwp": 57.26, "avp": 52.38095238095239, "hvp": 52.38095238095239, "modelTotal": 8.15, "vegasOU": 8.0}];
+const NO_PICK = [{"a": "Miami Marlins", "h": "Toronto Blue Jays", "reason": "SP eligibility (need 40+ IP and 3+ IP/appearance in last 365d) \u2014 Sandy Alcantara or Braydon Fisher", "aml": 105, "hml": -125, "ou": 7.5}, {"a": "Chicago Cubs", "h": "Pittsburgh Pirates", "reason": "SP eligibility (need 40+ IP and 3+ IP/appearance in last 365d) \u2014 Jordan Wicks or Braxton Ashcraft", "aml": 118, "hml": -140, "ou": 8.0}, {"a": "New York Yankees", "h": "Kansas City Royals", "reason": "SP eligibility (need 40+ IP and 3+ IP/appearance in last 365d) \u2014 Cam Schlittler or Bailey Falter", "aml": -205, "hml": 170, "ou": 8.5}, {"a": "Tampa Bay Rays", "h": "Baltimore Orioles", "reason": "SP eligibility (need 40+ IP and 3+ IP/appearance in last 365d) \u2014 Griffin Jax or Shane Baz", "aml": -115, "hml": -105, "ou": 8.5}];
 const LEDGER = {"lifetime": {"ml_net_units": -4.35, "ml_record": "7-11", "ml_win_pct": 38.9, "ou_record": "2-6", "ou_win_pct": 25.0, "total_picks": 26, "gain_pct": -10.88, "streak_pos_days": 0}, "monthly": [{"month": "2026-05", "ml_net_units": -4.35, "ml_record": "7-11", "ml_win_pct": 38.9, "ou_record": "2-6", "ou_win_pct": 25.0}], "yesterday": {"date": "2026-05-25", "ml_picks": [{"date": "2026-05-25", "game_pk": 823219, "away": "Arizona Diamondbacks", "home": "San Francisco Giants", "away_sp": "Merrill Kelly", "home_sp": "Landen Roupp", "pick_type": "ML", "pick_side": "away", "pick_team": "Arizona Diamondbacks", "pick_ml": 110, "pick_units": 1.0, "model_wp": 52.57, "vegas_wp": 47.62, "value_gap": 4.95, "vegas_implied": 0.4762, "status": "won", "logged_at": "2026-05-25T17:53:59", "actual_home_score": 2, "actual_away_score": 6, "net_units": 1.1, "graded_at": "2026-05-26T16:53:57"}, {"date": "2026-05-25", "game_pk": 823948, "away": "Colorado Rockies", "home": "Los Angeles Dodgers", "away_sp": "Tanner Gordon", "home_sp": "Emmet Sheehan", "pick_type": "ML", "pick_side": "away", "pick_team": "Colorado Rockies", "pick_ml": 270, "pick_units": 2.0, "model_wp": 33.08, "vegas_wp": 27.03, "value_gap": 6.05, "vegas_implied": 0.2703, "status": "lost", "logged_at": "2026-05-25T23:24:08", "actual_home_score": 5, "actual_away_score": 3, "net_units": -2.0, "graded_at": "2026-05-26T16:53:57"}], "ou_picks": [{"date": "2026-05-25", "game_pk": 823296, "away": "Philadelphia Phillies", "home": "San Diego Padres", "away_sp": "Jes\u00fas Luzardo", "home_sp": "Griffin Canning", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 8.22, "vegas_ou": 7.0, "ou_gap": 1.22, "status": "lost", "logged_at": "2026-05-25T20:13:08", "actual_home_score": 0, "actual_away_score": 3, "net_units": 0.0, "graded_at": "2026-05-26T16:53:57"}, {"date": "2026-05-25", "game_pk": 825005, "away": "Seattle Mariners", "home": "Athletics", "away_sp": "Luis Castillo", "home_sp": "Aaron Civale", "pick_type": "OU", "pick_side": "under", "pick_units": 0.0, "model_total": 8.39, "vegas_ou": 10.5, "ou_gap": -2.11, "status": "lost", "logged_at": "2026-05-25T23:24:08", "actual_home_score": 2, "actual_away_score": 9, "net_units": 0.0, "graded_at": "2026-05-26T16:53:57"}], "day_net": -0.9}};
 
 const SH={
@@ -217,8 +217,9 @@ function impliedProb(ml){
   return 100/(ml+100)*100;
 }
 function unitsForGap(gap){
-  // v18 LOCKED 2026-05-22: no half units, minimum 3% gap to bet.
-  if(gap < 3)   return 0;
+  // Ladder LOCKED 2026-05-26: 1u floor LOWERED to 2% (from 3%) to catch more small-edge plays.
+  // No half units; <2% still = no bet.
+  if(gap < 2)   return 0;
   if(gap < 6)   return 1.0;
   if(gap < 10)  return 2.0;
   return 3.0;
@@ -234,11 +235,12 @@ function badge(gap){
 }
 
 function ouHint(model, vegas){
-  // Use RAW diff (no rounding) to match generate_picks.py's >1.0 threshold exactly.
-  // Pre-fix bug: +(model-vegas).toFixed(1) rounded 0.96 -> 1.0, which then PASSED
-  // the < 1.0 check and showed "Model: OVER" when no O/U pick was actually logged.
+  // Use RAW diff (no rounding) to match generate_picks.py's >0.5 threshold exactly.
+  // (Threshold LOWERED 2026-05-26 from 1.0 -> 0.5 — OU stays tracker-only.)
+  // Pre-fix bug: +(model-vegas).toFixed(1) rounded 0.46 -> 0.5, which would PASS
+  // the <= 0.5 check at the boundary and show "Model: OVER" when no pick was logged.
   const diff = model - vegas;
-  if(Math.abs(diff) <= 1.0) return '';
+  if(Math.abs(diff) <= 0.5) return '';
   return diff>0?' &middot; Model: OVER':' &middot; Model: UNDER';
 }
 
@@ -338,7 +340,8 @@ function recalcYO(inp){
     const ou = parseFloat(oIn);
     if(!isNaN(ou)){
       const diff = g.modelTotal - ou;
-      if(Math.abs(diff) > 1.0){
+      // Threshold LOWERED 2026-05-26 from 1.0 -> 0.5 runs.
+      if(Math.abs(diff) > 0.5){
         const dir = diff > 0 ? 'OVER' : 'UNDER';
         parts.push(`O/U: model ${g.modelTotal.toFixed(1)} vs your ${ou.toFixed(1)} &rarr; <span class="pick">${dir}</span>`);
       } else {
