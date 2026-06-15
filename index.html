@@ -160,6 +160,13 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ep-net{margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);font-size:.72rem;color:var(--muted);text-align:center;}
 .ep-net.on{color:var(--navy);font-weight:700;}
 .ep-net b{color:var(--green);}
+.ln-row{max-width:540px;margin:0 auto 10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;}
+.ln-match{font-weight:900;color:var(--navy);font-size:.86rem;margin-bottom:7px;}
+.ln-inputs{display:flex;gap:8px;flex-wrap:wrap;}
+.ln-inputs label{flex:1;min-width:88px;font-size:.6rem;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:700;display:flex;flex-direction:column;gap:3px;}
+.ln-inputs input{padding:7px;border:1px solid var(--border);border-radius:7px;background:var(--cream);color:var(--navy);font-size:.9rem;font-weight:700;text-align:center;}
+.ep-vegas{font-size:.66rem;color:#666;margin-top:4px;font-weight:600;}
+.ep-vegas.none{color:#bbb;font-style:italic;}
 </style>
 </head>
 <body>
@@ -176,6 +183,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
     <button class="tab active" onclick="switchTab('today',this)">Today's Picks</button>
     <button class="tab" onclick="switchTab('rake',this)">Rake It In</button>
     <button class="tab" onclick="switchTab('panel',this)">Expert Panel &#x1F512;</button>
+    <button class="tab" onclick="switchTab('lines',this)">Lines &#x1F512;</button>
   </div>
 
   <div id="tab-today" class="tab-panel active">
@@ -234,6 +242,20 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       <div class="ep-note">Pick every game. Flip <b>Confident</b> to YES only on games you feel strongly about &mdash; those are the only picks that nudge the model (&plusmn;0.75pp each, &plusmn;5pp if all three agree). Votes lock at the first run of the day.</div>
       <div class="ep-trk" id="ep-trackers"></div>
       <div id="ep-vlist"></div>
+    </div>
+  </div>
+
+  <div id="tab-lines" class="tab-panel">
+    <div class="hdr"><div><h1>Lines</h1><sub>Vegas odds entry &middot; owner only</sub></div><img src="patrick.png" alt="Patrick"></div>
+    <div id="ep-lines-lock" class="ep-lock"><div class="ep-lock-box">
+      <div class="ep-lock-title">&#x1F512; Lines entry &mdash; owner only</div>
+      <input id="ep-lines-pw" type="password" placeholder="Lines password" autocomplete="off" onkeydown="if(event.key==='Enter')epLinesUnlock()">
+      <button onclick="epLinesUnlock()">Unlock</button>
+      <div id="ep-lines-pw-err" class="ep-err"></div>
+    </div></div>
+    <div id="ep-lines-inner" style="display:none">
+      <div class="ep-note">Enter current Vegas lines. They appear as implied win% on the Expert Panel tab to help the voters. This tab <b>never locks</b> &mdash; update lines any time.</div>
+      <div id="ep-lines-list"></div>
     </div>
   </div>
 </div>
@@ -456,6 +478,7 @@ function switchTab(name, btn){
   btn.classList.add('active');
   if(name === 'rake') renderRake();
   if(name === 'panel') renderPanel();
+  if(name === 'lines') renderLines();
 }
 
 function renderRake(){
@@ -546,6 +569,9 @@ let EP_ME = localStorage.getItem("ep_me") || null;
 let EP_UNLOCKED = sessionStorage.getItem("ep_unlocked")==="1";
 let EP_VOTES = {};
 let epDoc = null;
+let epLinesDoc = null;
+let EP_LINES = {};
+let EP_LINES_UNLOCKED = sessionStorage.getItem("ep_lines_unlocked")==="1";
 function epUnlock(){
   if(document.getElementById('ep-pw').value===EP_PW){ EP_UNLOCKED=true; sessionStorage.setItem('ep_unlocked','1'); epApplyLock(); }
   else { document.getElementById('ep-pw-err').textContent='Wrong password.'; }
@@ -564,6 +590,8 @@ function epInit(){
     epDoc = firebase.firestore().collection('panel').doc(EP_DATE);
     epDoc.onSnapshot(function(snap){ EP_VOTES=(snap.exists&&snap.data().votes)?snap.data().votes:{}; epSync('ok','&#9679; live'); epRender(); },
       function(err){ epSync('err','offline'); });
+    epLinesDoc = firebase.firestore().collection('lines').doc(EP_DATE);
+    epLinesDoc.onSnapshot(function(snap){ EP_LINES=(snap.exists&&snap.data().lines)?snap.data().lines:{}; epRenderVoting(); renderLines(); }, function(err){});
   }catch(e){ epSync('err','offline'); }
 }
 function epGet(pk,e){ var x=(EP_VOTES[pk]||{})[e]; return (x&&x.s)?x:null; }
@@ -617,11 +645,44 @@ function epRenderVoting(){
     if(a.ch+a.ca===0) netLine='<div class="ep-net">No confident votes &mdash; no model nudge</div>';
     else if(a.net===0) netLine='<div class="ep-net">Confident votes cancel &mdash; no nudge</div>';
     else { var team=a.net>0?s(g.h):s(g.a); var unan=(a.ch===3||a.ca===3)?' &middot; UNANIMOUS':''; netLine='<div class="ep-net on">Model nudge: <b>'+(a.net>0?'+':'')+a.net+'pp</b> &rarr; '+team+unan+'</div>'; }
-    h += '<div class="ep-vcard"><div class="ep-match">'+s(g.a)+' @ '+s(g.h)+dh+'</div><div class="ep-sps">'+g.asp+' vs '+g.hsp+'</div>'+rows+netLine+'</div>';
+    var ln=EP_LINES[g.pk]||{}, vegas;
+    if(ln.aml!=null && ln.hml!=null){ vegas='<div class="ep-vegas">Vegas: '+s(g.a)+' '+fmtML(ln.aml)+' ('+impliedProb(ln.aml).toFixed(0)+'%) &middot; '+s(g.h)+' '+fmtML(ln.hml)+' ('+impliedProb(ln.hml).toFixed(0)+'%)'+(ln.ou!=null?' &middot; O/U '+ln.ou:'')+'</div>'; }
+    else { vegas='<div class="ep-vegas none">Vegas line not entered yet</div>'; }
+    h += '<div class="ep-vcard"><div class="ep-match">'+s(g.a)+' @ '+s(g.h)+dh+'</div><div class="ep-sps">'+g.asp+' vs '+g.hsp+'</div>'+vegas+rows+netLine+'</div>';
   });
   document.getElementById('ep-vlist').innerHTML=h;
 }
 function epRender(){ epApplyLock(); epRenderTrackers(); epRenderVoting(); }
+function epLinesUnlock(){
+  if(document.getElementById('ep-lines-pw').value==='onlypcenter'){ EP_LINES_UNLOCKED=true; sessionStorage.setItem('ep_lines_unlocked','1'); epApplyLinesLock(); }
+  else { document.getElementById('ep-lines-pw-err').textContent='Wrong password.'; }
+}
+function epApplyLinesLock(){
+  var lk=document.getElementById('ep-lines-lock'), inn=document.getElementById('ep-lines-inner');
+  if(!lk||!inn) return; lk.style.display=EP_LINES_UNLOCKED?'none':'block'; inn.style.display=EP_LINES_UNLOCKED?'block':'none';
+}
+function epSetLine(pk, field, raw){
+  var num = (raw===''||raw==null) ? null : parseFloat(raw);
+  if(num!=null && isNaN(num)) return;
+  EP_LINES[pk]=EP_LINES[pk]||{}; EP_LINES[pk][field]=num;
+  if(epLinesDoc){ epLinesDoc.set({lines:{[pk]:{[field]:num}}},{merge:true}).catch(function(){}); }
+  epRenderVoting();
+}
+function renderLines(){
+  epApplyLinesLock();
+  var el=document.getElementById('ep-lines-list'); if(!el) return;
+  var h='';
+  EP_SLATE.forEach(function(g){
+    var ln=EP_LINES[g.pk]||{};
+    var v=function(f){ return (ln[f]!=null)?ln[f]:''; };
+    h += '<div class="ln-row"><div class="ln-match">'+s(g.a)+' @ '+s(g.h)+'</div><div class="ln-inputs">'
+      + '<label>'+s(g.a)+' ML<input type="number" value="'+v('aml')+'" onchange="epSetLine('+g.pk+',\'aml\',this.value)"></label>'
+      + '<label>'+s(g.h)+' ML<input type="number" value="'+v('hml')+'" onchange="epSetLine('+g.pk+',\'hml\',this.value)"></label>'
+      + '<label>O/U<input type="number" step="0.5" value="'+v('ou')+'" onchange="epSetLine('+g.pk+',\'ou\',this.value)"></label>'
+      + '</div></div>';
+  });
+  el.innerHTML=h;
+}
 function renderPanel(){ epRender(); }
 epInit();
 </script>
