@@ -42,6 +42,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .lbl{font-size:.6rem;text-transform:uppercase;letter-spacing:.3px;color:#aaa;}
 .val{font-size:.92rem;font-weight:700;color:var(--navy);}
 .val.vg{color:#666;font-weight:600;}
+.val.adj{color:#5a2d8c;font-weight:900;}
 .gp{color:var(--green);font-weight:900;}
 .gn{color:#cc1111;}
 .gz{color:var(--muted);}
@@ -294,7 +295,7 @@ if(sessionStorage.getItem('rp')==='1'){
 }
 
 // Data blocks rendered by build_dashboard.py
-const G = [{"game_pk": 823452, "a": "Miami Marlins", "h": "Philadelphia Phillies", "asp": "Ryan Gusto", "hsp": "Zack Wheeler", "amm": 155, "hmm": -155, "aml": 158, "hml": -190, "awp": 39.24, "hwp": 60.76, "avp": 38.759689922480625, "hvp": 65.51724137931035, "modelTotal": 7.43, "vegasOU": 8.0, "newStadium": false}];
+const G = [{"game_pk": 823452, "a": "Miami Marlins", "h": "Philadelphia Phillies", "asp": "Ryan Gusto", "hsp": "Zack Wheeler", "amm": 155, "hmm": -155, "aml": 158, "hml": -190, "awp": 39.24, "hwp": 60.76, "avp": 38.759689922480625, "hvp": 65.51724137931035, "modelTotal": 7.43, "vegasOU": 8.0, "newStadium": false, "hAdj": 65.76, "aAdj": 34.24, "panelNet": 5.0}];
 const NO_PICK = [{"a": "Kansas City Royals", "h": "Washington Nationals", "reason": "SP eligibility (need 40+ IP and 3+ IP/appearance in last 365d) \u2014 Mitch Spence or Andrew Alvarez", "aml": 110, "hml": -130, "ou": 9.5}, {"a": "New York Mets", "h": "Cincinnati Reds", "reason": "SP eligibility (need 40+ IP and 3+ IP/appearance in last 365d) \u2014 Tobias Myers or Chase Burns", "aml": 118, "hml": -140, "ou": 8.5}];
 const LEDGER = {"lifetime": {"ml_net_units": 0.76, "ml_record": "39-40", "ml_win_pct": 49.4, "ou_record": "37-37-2", "ou_win_pct": 50.0, "total_picks": 178, "gain_pct": 1.89, "streak_pos_days": 2}, "monthly": [{"month": "2026-05", "ml_net_units": -6.76, "ml_record": "16-19", "ml_win_pct": 45.7, "ou_record": "6-5", "ou_win_pct": 54.5}, {"month": "2026-06", "ml_net_units": 7.52, "ml_record": "23-21", "ml_win_pct": 52.3, "ou_record": "31-32-2", "ou_win_pct": 49.2}], "yesterday": {"date": "2026-06-14", "ml_picks": [{"date": "2026-06-14", "game_pk": 823777, "away": "Philadelphia Phillies", "home": "Milwaukee Brewers", "away_sp": "Cristopher S\u00e1nchez", "home_sp": "Kyle Harrison", "pick_type": "ML", "pick_side": "home", "pick_team": "Milwaukee Brewers", "pick_ml": 110, "pick_units": 2.0, "model_wp": 54.5, "vegas_wp": 47.62, "value_gap": 6.88, "vegas_implied": 0.4762, "status": "won", "logged_at": "2026-06-14T16:06:21", "actual_home_score": 4, "actual_away_score": 0, "net_units": 2.2, "graded_at": "2026-06-15T11:09:10"}, {"date": "2026-06-14", "game_pk": 824751, "away": "Texas Rangers", "home": "Boston Red Sox", "away_sp": "Nathan Eovaldi", "home_sp": "Connelly Early", "pick_type": "ML", "pick_side": "away", "pick_team": "Texas Rangers", "pick_ml": 100, "pick_units": 1.0, "model_wp": 53.65, "vegas_wp": 50.0, "value_gap": 3.65, "vegas_implied": 0.5, "status": "won", "logged_at": "2026-06-14T21:00:49", "actual_home_score": 4, "actual_away_score": 6, "net_units": 1.0, "graded_at": "2026-06-15T11:09:10"}], "ou_picks": [{"date": "2026-06-14", "game_pk": 823368, "away": "Miami Marlins", "home": "Pittsburgh Pirates", "away_sp": "Max Meyer", "home_sp": "Paul Skenes", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 8.2, "vegas_ou": 7.0, "ou_gap": 1.2, "status": "lost", "logged_at": "2026-06-14T15:22:32", "actual_home_score": 2, "actual_away_score": 4, "net_units": 0.0, "graded_at": "2026-06-15T11:09:10"}, {"date": "2026-06-14", "game_pk": 824506, "away": "Arizona Diamondbacks", "home": "Cincinnati Reds", "away_sp": "Zac Gallen", "home_sp": "Andrew Abbott", "pick_type": "OU", "pick_side": "under", "pick_units": 0.0, "model_total": 8.26, "vegas_ou": 10.0, "ou_gap": -1.74, "status": "won", "logged_at": "2026-06-14T15:22:32", "actual_home_score": 3, "actual_away_score": 5, "net_units": 0.0, "graded_at": "2026-06-15T11:09:10"}, {"date": "2026-06-14", "game_pk": 824586, "away": "Los Angeles Dodgers", "home": "Chicago White Sox", "away_sp": "Emmet Sheehan", "home_sp": "Erick Fedde", "pick_type": "OU", "pick_side": "under", "pick_units": 0.0, "model_total": 8.22, "vegas_ou": 9.5, "ou_gap": -1.28, "status": "lost", "logged_at": "2026-06-14T15:22:32", "actual_home_score": 6, "actual_away_score": 4, "net_units": 0.0, "graded_at": "2026-06-15T11:09:10"}, {"date": "2026-06-14", "game_pk": 824823, "away": "San Diego Padres", "home": "Baltimore Orioles", "away_sp": "Walker Buehler", "home_sp": "Trevor Rogers", "pick_type": "OU", "pick_side": "under", "pick_units": 0.0, "model_total": 8.51, "vegas_ou": 10.0, "ou_gap": -1.49, "status": "won", "logged_at": "2026-06-14T15:22:32", "actual_home_score": 2, "actual_away_score": 5, "net_units": 0.0, "graded_at": "2026-06-15T11:09:10"}, {"date": "2026-06-14", "game_pk": 822801, "away": "New York Yankees", "home": "Toronto Blue Jays", "away_sp": "Will Warren", "home_sp": "Patrick Corbin", "pick_type": "OU", "pick_side": "under", "pick_units": 0.0, "model_total": 7.4, "vegas_ou": 8.5, "ou_gap": -1.1, "status": "lost", "logged_at": "2026-06-14T16:06:21", "actual_home_score": 3, "actual_away_score": 8, "net_units": 0.0, "graded_at": "2026-06-15T11:09:10"}, {"date": "2026-06-14", "game_pk": 823777, "away": "Philadelphia Phillies", "home": "Milwaukee Brewers", "away_sp": "Cristopher S\u00e1nchez", "home_sp": "Kyle Harrison", "pick_type": "OU", "pick_side": "over", "pick_units": 0.0, "model_total": 7.42, "vegas_ou": 6.5, "ou_gap": 0.92, "status": "lost", "logged_at": "2026-06-14T16:06:21", "actual_home_score": 4, "actual_away_score": 0, "net_units": 0.0, "graded_at": "2026-06-15T11:09:10"}, {"date": "2026-06-14", "game_pk": 824751, "away": "Texas Rangers", "home": "Boston Red Sox", "away_sp": "Nathan Eovaldi", "home_sp": "Connelly Early", "pick_type": "OU", "pick_side": "under", "pick_units": 0.0, "model_total": 8.46, "vegas_ou": 9.0, "ou_gap": -0.54, "status": "lost", "logged_at": "2026-06-14T21:00:49", "actual_home_score": 4, "actual_away_score": 6, "net_units": 0.0, "graded_at": "2026-06-15T11:09:10"}], "day_net": 3.2}};
 
@@ -370,6 +371,7 @@ function renderTodayCard(g){
       <div class="row"><div class="lbl">Model ML</div><div class="val">${fmtML(g.amm)}</div></div>
       <div class="row"><div class="lbl">Vegas ML</div><div class="val vg">${fmtML(g.aml)}</div></div>
       <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.awp.toFixed(1)}%</div></div>
+      ${g.panelNet ? '<div class="row"><div class="lbl">Adj. Win%</div><div class="val adj">'+g.aAdj.toFixed(1)+'%</div></div>' : ''}
       <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.avp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.agRaw)}">${gf(g.ag)}</div></div>
       ${showBadgeAway ? badge(g.agRaw) : ICE_BADGE}
@@ -380,6 +382,7 @@ function renderTodayCard(g){
       <div class="row"><div class="lbl">Model ML</div><div class="val">${fmtML(g.hmm)}</div></div>
       <div class="row"><div class="lbl">Vegas ML</div><div class="val vg">${fmtML(g.hml)}</div></div>
       <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.hwp.toFixed(1)}%</div></div>
+      ${g.panelNet ? '<div class="row"><div class="lbl">Adj. Win%</div><div class="val adj">'+g.hAdj.toFixed(1)+'%</div></div>' : ''}
       <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.hvp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.hgRaw)}">${gf(g.hg)}</div></div>
       ${showBadgeHome ? badge(g.hgRaw) : ICE_BADGE}
@@ -469,8 +472,8 @@ G.forEach(g => {
   // RAW gaps drive unit sizing (must match generate_picks.py's raw-gap ladder).
   // g.ag/g.hg stay ROUNDED for DISPLAY only — rounding before the ladder made a
   // 5.998% gap show 2u instead of 1u (NYM 2026-06-09). Fixed 2026-06-10.
-  g.agRaw = g.awp - g.avp;
-  g.hgRaw = g.hwp - g.hvp;
+  g.agRaw = (g.aAdj!=null?g.aAdj:g.awp) - g.avp;
+  g.hgRaw = (g.hAdj!=null?g.hAdj:g.hwp) - g.hvp;
   g.ag = +g.agRaw.toFixed(1);
   g.hg = +g.hgRaw.toFixed(1);
 });
