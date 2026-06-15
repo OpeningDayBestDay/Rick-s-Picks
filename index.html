@@ -582,7 +582,7 @@ const EP_FB = {"apiKey": "AIzaSyA7NQXH_Y1GDB1eLRq67D3tEcqCcDw15Co", "authDomain"
 const EP_DATE = "2026-06-15";
 const EP_TRACKERS = {"Pat": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Tommy": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Brendan": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Majority": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
 const EP_EXPERTS = ["Pat","Tommy","Brendan"];
-let EP_ME = localStorage.getItem("ep_me") || null;
+let EP_ME = null;  // always start greyed each visit; user must tap "I am" to enable their row
 let EP_UNLOCKED = sessionStorage.getItem("ep_unlocked")==="1";
 let EP_VOTES = {};
 let epDoc = null;
@@ -599,7 +599,7 @@ function epApplyLock(){
   lk.style.display = EP_UNLOCKED?'none':'block';
   inn.style.display = EP_UNLOCKED?'block':'none';
 }
-function epSetMe(n){ EP_ME=n; localStorage.setItem('ep_me',n); epRender(); }
+function epSetMe(n){ EP_ME=n; epRender(); }
 function epSync(cls,txt){ var d=document.getElementById('ep-sync'); if(d){ d.className='ep-sync '+cls; d.innerHTML=txt; } }
 function epInit(){
   try{
