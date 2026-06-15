@@ -157,6 +157,18 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ep-conf.disabled{opacity:.4;cursor:default;}
 .ep-pill{display:inline-block;min-width:34px;text-align:center;border-radius:6px;padding:2px 7px;font-weight:900;background:#ddd;color:#777;}
 .ep-conf.on .ep-pill{background:var(--green);color:#fff;}
+.ep-erow{display:flex;align-items:flex-start;gap:8px;margin-top:11px;padding-top:10px;border-top:1px solid var(--border);}
+.ep-erow:first-of-type{border-top:none;padding-top:2px;}
+.ep-erow.mine .ep-exp{color:var(--red);}
+.ep-stack{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;}
+.ep-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.ep-tag{width:28px;font-size:.56rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+.ep-erow.locked .ep-vb{opacity:.4;cursor:not-allowed;} .ep-erow.locked .ep-conf{opacity:.4;}
+.ep-tu{font-weight:800;}.ep-tu.pos{color:var(--green);}.ep-tu.neg{color:#cc1111;}
+.ep-foot{max-width:540px;margin:-4px auto 16px;padding:0 16px;font-size:.62rem;color:var(--muted);font-style:italic;text-align:center;line-height:1.45;}
+.ep-foot b{color:var(--navy);font-style:normal;}
+.ep-tline.net{border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:3px;}
+.ep-tline.net span:first-child{font-weight:800;color:var(--navy);}
 .ep-net{margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);font-size:.72rem;color:var(--muted);text-align:center;}
 .ep-net.on{color:var(--navy);font-weight:700;}
 .ep-net b{color:var(--green);}
@@ -241,6 +253,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       </div>
       <div class="ep-note">Pick every game. Flip <b>Confident</b> to YES only on games you feel strongly about &mdash; those are the only picks that nudge the model (&plusmn;0.75pp each, &plusmn;5pp if all three agree). Votes lock at the first run of the day.</div>
       <div class="ep-trk" id="ep-trackers"></div>
+      <div class="ep-foot">Confident / All / O/U = win %. <b>Net units assume a 1-unit wager per pick</b>, paid at the entered Vegas odds.</div>
       <div id="ep-vlist"></div>
     </div>
   </div>
@@ -563,7 +576,7 @@ const EP_SLATE = [{"pk": 823452, "a": "Miami Marlins", "h": "Philadelphia Philli
 const EP_PW = "roundtable";
 const EP_FB = {"apiKey": "AIzaSyA7NQXH_Y1GDB1eLRq67D3tEcqCcDw15Co", "authDomain": "ricks-picks.firebaseapp.com", "projectId": "ricks-picks", "storageBucket": "ricks-picks.firebasestorage.app", "messagingSenderId": "576770622779", "appId": "1:576770622779:web:629f18b09f6f5ebd9f231e", "measurementId": "G-W19PJXV1B0"};
 const EP_DATE = "2026-06-15";
-const EP_TRACKERS = {"Pat": {"conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Tommy": {"conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Brendan": {"conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Majority": {"conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
+const EP_TRACKERS = {"Pat": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Tommy": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Brendan": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Majority": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
 const EP_EXPERTS = ["Pat","Tommy","Brendan"];
 let EP_ME = localStorage.getItem("ep_me") || null;
 let EP_UNLOCKED = sessionStorage.getItem("ep_unlocked")==="1";
@@ -594,28 +607,45 @@ function epInit(){
     epLinesDoc.onSnapshot(function(snap){ EP_LINES=(snap.exists&&snap.data().lines)?snap.data().lines:{}; epRenderVoting(); renderLines(); }, function(err){});
   }catch(e){ epSync('err','offline'); }
 }
-function epGet(pk,e){ var x=(EP_VOTES[pk]||{})[e]; return (x&&x.s)?x:null; }
-function epPush(pk,e,val){
-  EP_VOTES[pk]=EP_VOTES[pk]||{}; EP_VOTES[pk][e]=val; epRender();
-  if(epDoc){ epDoc.set({votes:{[pk]:{[e]:val}}},{merge:true}).catch(function(){}); }
+function epRaw(pk,e){ return (EP_VOTES[pk]||{})[e] || {}; }
+function epWrite(pk,e,obj){
+  EP_VOTES[pk]=EP_VOTES[pk]||{}; EP_VOTES[pk][e]=obj; epRender();
+  if(epDoc){ epDoc.set({votes:{[pk]:{[e]:obj}}},{merge:true}).catch(function(){}); }
 }
 function epSetVote(pk,e,side){
   if(EP_ME && e!==EP_ME) return;
   var code = side==='away'?'a' : side==='home'?'h' : null;
-  var cur=epGet(pk,e), val;
-  if(code===null) val=null;
-  else if(cur && cur.s===code) val=null;
-  else val={s:code, c: cur?cur.c:false};
-  epPush(pk,e,val);
+  var cur=epRaw(pk,e);
+  var sNew = (code===null) ? null : (cur.s===code ? null : code);
+  epWrite(pk,e,{s:sNew, c: sNew?(cur.c||false):false, ou:cur.ou||null});
 }
-function epSetConf(pk,e){ if(EP_ME&&e!==EP_ME) return; var cur=epGet(pk,e); if(!cur) return; epPush(pk,e,{s:cur.s,c:!cur.c}); }
+function epSetConf(pk,e){
+  if(EP_ME&&e!==EP_ME) return;
+  var cur=epRaw(pk,e); if(!cur.s) return;
+  epWrite(pk,e,{s:cur.s, c:!cur.c, ou:cur.ou||null});
+}
+function epSetOu(pk,e,val){
+  if(EP_ME&&e!==EP_ME) return;
+  var code = val==='o'?'o' : val==='u'?'u' : null;
+  var cur=epRaw(pk,e);
+  var ouNew = (cur.ou===code) ? null : code;
+  epWrite(pk,e,{s:cur.s||null, c:cur.c||false, ou:ouNew});
+}
 function epRenderTrackers(){
   var names=EP_EXPERTS.concat(['Majority']);
-  var line=function(lbl,tt){ return (tt&&tt.total)
-    ? '<div class="ep-tline"><span>'+lbl+'</span><span><b>'+tt.win_pct.toFixed(1)+'%</b> '+tt.record+'</span></div>'
-    : '<div class="ep-tline"><span>'+lbl+'</span><span>&mdash;</span></div>'; };
+  var wp=function(lbl,t){
+    if(!t||!t.total) return '<div class="ep-tline"><span>'+lbl+'</span><span>&mdash;</span></div>';
+    return '<div class="ep-tline"><span>'+lbl+'</span><span><b>'+t.win_pct.toFixed(1)+'%</b> '+t.record+'</span></div>';
+  };
   document.getElementById('ep-trackers').innerHTML = names.map(function(n){
-    var d=(EP_TRACKERS||{})[n]||{}; return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+line('Confident',d.conf)+line('All',d.all)+'</div>'; }).join('');
+    var d=(EP_TRACKERS||{})[n]||{};
+    var hasAny=(d.all&&d.all.total)||(d.conf&&d.conf.total);
+    var v=d.net_units||0;
+    var net = hasAny
+      ? '<div class="ep-tline net"><span>Net Units</span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span></div>'
+      : '<div class="ep-tline net"><span>Net Units</span><span>&mdash;</span></div>';
+    return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+net+wp('Confident',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
+  }).join('');
 }
 function epNet(pk){
   var v=EP_VOTES[pk]||{}, ch=0, ca=0;
@@ -629,16 +659,23 @@ function epRenderVoting(){
   EP_SLATE.forEach(function(g){
     var rows='';
     EP_EXPERTS.forEach(function(e){
-      var x=(EP_VOTES[g.pk]||{})[e]||null; var sName=(x&&x.s)||null; var c=!!(x&&x.c);
+      var x=(EP_VOTES[g.pk]||{})[e]||{}; var sName=x.s||null; var c=!!x.c; var ou=x.ou||null;
       var locked = EP_ME && e!==EP_ME;
       var conf = sName
         ? '<div class="ep-conf '+(c?'on':'')+'" onclick="epSetConf('+g.pk+',\''+e+'\')">Confident? <span class="ep-pill">'+(c?'YES':'NO')+'</span></div>'
         : '<div class="ep-conf disabled">Confident? <span class="ep-pill">&mdash;</span></div>';
-      rows += '<div class="ep-vrow'+(locked?' locked':'')+(e===EP_ME?' mine':'')+'"><div class="ep-exp">'+e+'</div><div class="ep-btns">'
-        + '<div class="ep-vb '+(sName==='a'?'sel':'')+'" onclick="epSetVote('+g.pk+',\''+e+'\',\'away\')">'+s(g.a)+'</div>'
-        + '<div class="ep-vb abst '+(sName==null?'sel':'')+'" onclick="epSetVote('+g.pk+',\''+e+'\',\'abst\')">No opinion</div>'
-        + '<div class="ep-vb '+(sName==='h'?'sel':'')+'" onclick="epSetVote('+g.pk+',\''+e+'\',\'home\')">'+s(g.h)+'</div>'
-        + '</div>'+conf+'</div>';
+      rows += '<div class="ep-erow'+(locked?' locked':'')+(e===EP_ME?' mine':'')+'"><div class="ep-exp">'+e+'</div><div class="ep-stack">'
+        + '<div class="ep-line"><span class="ep-tag">ML</span><div class="ep-btns">'
+        +   '<div class="ep-vb '+(sName==='a'?'sel':'')+'" onclick="epSetVote('+g.pk+',\''+e+'\',\'away\')">'+s(g.a)+'</div>'
+        +   '<div class="ep-vb abst '+(sName==null?'sel':'')+'" onclick="epSetVote('+g.pk+',\''+e+'\',\'abst\')">&mdash;</div>'
+        +   '<div class="ep-vb '+(sName==='h'?'sel':'')+'" onclick="epSetVote('+g.pk+',\''+e+'\',\'home\')">'+s(g.h)+'</div>'
+        +   '</div>'+conf+'</div>'
+        + '<div class="ep-line"><span class="ep-tag">O/U</span><div class="ep-btns">'
+        +   '<div class="ep-vb '+(ou==='o'?'sel':'')+'" onclick="epSetOu('+g.pk+',\''+e+'\',\'o\')">Over</div>'
+        +   '<div class="ep-vb abst '+(ou==null?'sel':'')+'" onclick="epSetOu('+g.pk+',\''+e+'\',\'x\')">&mdash;</div>'
+        +   '<div class="ep-vb '+(ou==='u'?'sel':'')+'" onclick="epSetOu('+g.pk+',\''+e+'\',\'u\')">Under</div>'
+        +   '</div></div>'
+        + '</div></div>';
     });
     var dh = g.gameNum ? '<span class="ep-dh">G'+g.gameNum+'/'+g.dhTotal+'</span>' : '';
     var a=epNet(g.pk), netLine;
