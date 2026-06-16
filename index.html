@@ -371,7 +371,7 @@ function renderTodayCard(g){
       <div class="row"><div class="lbl">Model ML</div><div class="val">${fmtML(g.amm)}</div></div>
       <div class="row"><div class="lbl">Vegas ML</div><div class="val vg">${fmtML(g.aml)}</div></div>
       <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.awp.toFixed(1)}%</div></div>
-      ${g.panelNet ? '<div class="row"><div class="lbl">Adj. Win%</div><div class="val adj">'+g.aAdj.toFixed(1)+'%</div></div>' : ''}
+      <div class="row"><div class="lbl">Adj. Win%</div><div class="val adj">${(g.aAdj!=null?g.aAdj:g.awp).toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.avp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.agRaw)}">${gf(g.ag)}</div></div>
       ${showBadgeAway ? badge(g.agRaw) : ICE_BADGE}
@@ -382,7 +382,7 @@ function renderTodayCard(g){
       <div class="row"><div class="lbl">Model ML</div><div class="val">${fmtML(g.hmm)}</div></div>
       <div class="row"><div class="lbl">Vegas ML</div><div class="val vg">${fmtML(g.hml)}</div></div>
       <div class="row"><div class="lbl">Model Win%</div><div class="val">${g.hwp.toFixed(1)}%</div></div>
-      ${g.panelNet ? '<div class="row"><div class="lbl">Adj. Win%</div><div class="val adj">'+g.hAdj.toFixed(1)+'%</div></div>' : ''}
+      <div class="row"><div class="lbl">Adj. Win%</div><div class="val adj">${(g.hAdj!=null?g.hAdj:g.hwp).toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Vegas Win%</div><div class="val vg">${g.hvp.toFixed(1)}%</div></div>
       <div class="row"><div class="lbl">Value Gap</div><div class="val ${gc(g.hgRaw)}">${gf(g.hg)}</div></div>
       ${showBadgeHome ? badge(g.hgRaw) : ICE_BADGE}
