@@ -258,7 +258,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       </div>
       <div class="ep-note">Pick every game. Flip <b>Confident</b> to YES only on games you feel strongly about &mdash; those are the only picks that nudge the model (&plusmn;0.75pp each, &plusmn;5pp if all three agree). Each game's votes lock when that game is published.</div>
       <div class="ep-trk" id="ep-trackers"></div>
-      <div class="ep-foot">Confident / All / O/U = win %. <b>Net units assume a 1-unit wager per pick</b>, paid at the entered Vegas odds.</div>
+      <div class="ep-foot"><b>NU</b> = Net Units (1u/pick at entered Vegas odds) &middot; <b>Conf</b> / All / O/U = win %. Pick count (e.g. <b>13p</b>) shown for credibility.</div>
       <div id="ep-vlist"></div>
     </div>
   </div>
@@ -658,9 +658,9 @@ function epRenderTrackers(){
     var hasAny=nt||(d.conf&&d.conf.total);
     var v=d.net_units||0;
     var net = hasAny
-      ? '<div class="ep-tline net"><span>Net Units</span><span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span> <span class="ep-ct">'+nt+'p</span></span></div>'
-      : '<div class="ep-tline net"><span>Net Units</span><span>&mdash;</span></div>';
-    return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+net+wp('Confident',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
+      ? '<div class="ep-tline net"><span>NU</span><span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span> <span class="ep-ct">'+nt+'p</span></span></div>'
+      : '<div class="ep-tline net"><span>NU</span><span>&mdash;</span></div>';
+    return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+net+wp('Conf',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
   }).join('');
 }
 function epNet(pk){
