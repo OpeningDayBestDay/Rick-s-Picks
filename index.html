@@ -138,7 +138,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ep-note{max-width:540px;margin:6px auto 14px;padding:11px 14px;background:#f8f3e4;border:1px solid var(--border);border-radius:10px;font-size:.72rem;color:#555;line-height:1.5;}
 .ep-note b{color:var(--navy);}
 .ep-trk{display:flex;gap:8px;flex-wrap:wrap;max-width:540px;margin:0 auto 14px;padding:0 12px;}
-.ep-tcard{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;}
+.ep-tcard{flex:1 1 calc(50% - 4px);min-width:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;}
 .ep-tcard .nm{font-weight:900;font-size:.9rem;color:var(--navy);}
 .ep-tline{display:flex;justify-content:space-between;font-size:.72rem;margin-top:5px;color:#666;}
 .ep-tline b{font-size:.85rem;color:var(--navy);}
@@ -258,7 +258,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       </div>
       <div class="ep-note">Pick every game. Flip <b>Confident</b> to YES only on games you feel strongly about &mdash; those are the only picks that nudge the model (&plusmn;0.75pp each, &plusmn;5pp if all three agree). Each game's votes lock when that game is published.</div>
       <div class="ep-trk" id="ep-trackers"></div>
-      <div class="ep-foot"><b>NU</b> = Net Units (1u/pick at entered Vegas odds) &middot; <b>Conf</b> / All / O/U = win %. Pick count (e.g. <b>13p</b>) shown for credibility.</div>
+      <div class="ep-foot"><b>Net Units</b> = 1u/pick at the entered Vegas odds &middot; <b>Conf</b> = Confident. Conf / All / O/U are win %; pick count (e.g. <b>13p</b>) shown for credibility.</div>
       <div id="ep-vlist"></div>
     </div>
   </div>
@@ -658,8 +658,8 @@ function epRenderTrackers(){
     var hasAny=nt||(d.conf&&d.conf.total);
     var v=d.net_units||0;
     var net = hasAny
-      ? '<div class="ep-tline net"><span>NU</span><span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span> <span class="ep-ct">'+nt+'p</span></span></div>'
-      : '<div class="ep-tline net"><span>NU</span><span>&mdash;</span></div>';
+      ? '<div class="ep-tline net"><span>Net Units</span><span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span> <span class="ep-ct">'+nt+'p</span></span></div>'
+      : '<div class="ep-tline net"><span>Net Units</span><span>&mdash;</span></div>';
     return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+net+wp('Conf',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
   }).join('');
 }
