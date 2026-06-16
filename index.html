@@ -585,7 +585,7 @@ const EP_LOCKED_VOTES = {"822724": {}, "823452": {"Tommy": {"s": "h", "c": true}
 const EP_PW = "roundtable";
 const EP_FB = {"apiKey": "AIzaSyA7NQXH_Y1GDB1eLRq67D3tEcqCcDw15Co", "authDomain": "ricks-picks.firebaseapp.com", "projectId": "ricks-picks", "storageBucket": "ricks-picks.firebasestorage.app", "messagingSenderId": "576770622779", "appId": "1:576770622779:web:629f18b09f6f5ebd9f231e", "measurementId": "G-W19PJXV1B0"};
 const EP_DATE = "2026-06-15";
-const EP_TRACKERS = {"Pat": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Tommy": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Brendan": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Majority": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Anonymous": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
+const EP_TRACKERS = {"Pat": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Tommy": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Brendan": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Majority": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Unanimous": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
 const EP_EXPERTS = ["Pat","Tommy","Brendan"];
 let EP_ME = null;  // always start greyed each visit; user must tap "I am" to enable their row
 let EP_UNLOCKED = sessionStorage.getItem("ep_unlocked")==="1";
@@ -642,7 +642,7 @@ function epSetOu(pk,e,val){
   epWrite(pk,e,{s:cur.s||null, c:cur.c||false, ou:ouNew});
 }
 function epRenderTrackers(){
-  var names=EP_EXPERTS.concat(['Majority','Anonymous']);
+  var names=EP_EXPERTS.concat(['Majority','Unanimous']);
   var wp=function(lbl,t){
     if(!t||!t.total) return '<div class="ep-tline"><span>'+lbl+'</span><span>&mdash;</span></div>';
     return '<div class="ep-tline"><span>'+lbl+'</span><span><b>'+t.win_pct.toFixed(1)+'%</b> '+t.record+' <span class="ep-ct">'+t.total+'p</span></span></div>';
