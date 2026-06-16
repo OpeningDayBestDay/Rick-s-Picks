@@ -170,6 +170,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ep-foot b{color:var(--navy);font-style:normal;}
 .ep-tline.net{border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:3px;}
 .ep-tline.net span:first-child{font-weight:800;color:var(--navy);}
+.ep-ct{color:var(--muted);font-size:.6rem;font-weight:700;}
 .ep-prompt{max-width:540px;margin:0 auto 12px;padding:11px 14px;background:#fff3cd;border:1px solid #e0c97a;border-radius:10px;text-align:center;font-size:.78rem;font-weight:800;color:#7a5200;}
 .ep-vcard.locked{opacity:.93;}
 .ep-lockbadge{display:inline-block;background:var(--navy);color:var(--cream);border-radius:6px;padding:1px 7px;font-size:.56rem;font-weight:900;letter-spacing:.4px;margin-left:6px;vertical-align:middle;}
@@ -584,7 +585,7 @@ const EP_LOCKED_VOTES = {"822724": {}, "823452": {"Tommy": {"s": "h", "c": true}
 const EP_PW = "roundtable";
 const EP_FB = {"apiKey": "AIzaSyA7NQXH_Y1GDB1eLRq67D3tEcqCcDw15Co", "authDomain": "ricks-picks.firebaseapp.com", "projectId": "ricks-picks", "storageBucket": "ricks-picks.firebasestorage.app", "messagingSenderId": "576770622779", "appId": "1:576770622779:web:629f18b09f6f5ebd9f231e", "measurementId": "G-W19PJXV1B0"};
 const EP_DATE = "2026-06-15";
-const EP_TRACKERS = {"Pat": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Tommy": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Brendan": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Majority": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
+const EP_TRACKERS = {"Pat": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Tommy": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Brendan": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Majority": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}, "Anonymous": {"net_units": 0.0, "conf": {"record": "0-0", "win_pct": 0.0, "total": 0}, "all": {"record": "0-0", "win_pct": 0.0, "total": 0}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
 const EP_EXPERTS = ["Pat","Tommy","Brendan"];
 let EP_ME = null;  // always start greyed each visit; user must tap "I am" to enable their row
 let EP_UNLOCKED = sessionStorage.getItem("ep_unlocked")==="1";
@@ -641,17 +642,18 @@ function epSetOu(pk,e,val){
   epWrite(pk,e,{s:cur.s||null, c:cur.c||false, ou:ouNew});
 }
 function epRenderTrackers(){
-  var names=EP_EXPERTS.concat(['Majority']);
+  var names=EP_EXPERTS.concat(['Majority','Anonymous']);
   var wp=function(lbl,t){
     if(!t||!t.total) return '<div class="ep-tline"><span>'+lbl+'</span><span>&mdash;</span></div>';
-    return '<div class="ep-tline"><span>'+lbl+'</span><span><b>'+t.win_pct.toFixed(1)+'%</b> '+t.record+'</span></div>';
+    return '<div class="ep-tline"><span>'+lbl+'</span><span><b>'+t.win_pct.toFixed(1)+'%</b> '+t.record+' <span class="ep-ct">'+t.total+'p</span></span></div>';
   };
   document.getElementById('ep-trackers').innerHTML = names.map(function(n){
     var d=(EP_TRACKERS||{})[n]||{};
-    var hasAny=(d.all&&d.all.total)||(d.conf&&d.conf.total);
+    var nt=(d.all&&d.all.total)||0;
+    var hasAny=nt||(d.conf&&d.conf.total);
     var v=d.net_units||0;
     var net = hasAny
-      ? '<div class="ep-tline net"><span>Net Units</span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span></div>'
+      ? '<div class="ep-tline net"><span>Net Units</span><span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span> <span class="ep-ct">'+nt+'p</span></span></div>'
       : '<div class="ep-tline net"><span>Net Units</span><span>&mdash;</span></div>';
     return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+net+wp('Confident',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
   }).join('');
