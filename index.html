@@ -258,7 +258,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       </div>
       <div class="ep-note">Pick every game. Flip <b>Confident</b> to YES only on games you feel strongly about &mdash; those are the only picks that nudge the model (&plusmn;0.75pp each, &plusmn;5pp if all three agree). Each game's votes lock when that game is published.</div>
       <div class="ep-trk" id="ep-trackers"></div>
-      <div class="ep-foot"><b>Net Units</b> = 1u/pick at the entered Vegas odds &middot; <b>Conf</b> = Confident. Conf / All / O/U are win %; pick count (e.g. <b>13p</b>) shown for credibility.</div>
+      <div class="ep-foot"><b>Net Units</b> = 1u/pick at the entered Vegas odds &middot; <b>Net Units Conf</b> = same, confident picks only &middot; <b>Conf</b> = Confident. Conf / All / O/U are win %; pick count (e.g. <b>13p</b>) shown for credibility.</div>
       <div id="ep-vlist"></div>
     </div>
   </div>
@@ -590,7 +590,7 @@ const EP_LOCKED_VOTES = {};
 const EP_PW = "roundtable";
 const EP_FB = {"apiKey": "AIzaSyA7NQXH_Y1GDB1eLRq67D3tEcqCcDw15Co", "authDomain": "ricks-picks.firebaseapp.com", "projectId": "ricks-picks", "storageBucket": "ricks-picks.firebasestorage.app", "messagingSenderId": "576770622779", "appId": "1:576770622779:web:629f18b09f6f5ebd9f231e", "measurementId": "G-W19PJXV1B0"};
 const EP_DATE = "2026-06-20";
-const EP_TRACKERS = {"Pat": {"net_units": -6.88, "conf": {"record": "3-3", "win_pct": 50.0, "total": 6}, "all": {"record": "17-20", "win_pct": 45.9, "total": 37}, "ou": {"record": "12-11-1", "win_pct": 52.2, "total": 24}}, "Tommy": {"net_units": 1.95, "conf": {"record": "10-5", "win_pct": 66.7, "total": 15}, "all": {"record": "18-10", "win_pct": 64.3, "total": 28}, "ou": {"record": "4-1", "win_pct": 80.0, "total": 5}}, "Brendan": {"net_units": -1.27, "conf": {"record": "4-1", "win_pct": 80.0, "total": 5}, "all": {"record": "25-23", "win_pct": 52.1, "total": 48}, "ou": {"record": "3-9-1", "win_pct": 25.0, "total": 13}}, "Majority": {"net_units": -4.03, "conf": {"record": "2-3", "win_pct": 40.0, "total": 5}, "all": {"record": "16-15", "win_pct": 51.6, "total": 31}, "ou": {"record": "2-2", "win_pct": 50.0, "total": 4}}, "Unanimous": {"net_units": -0.7, "conf": {"record": "1-0", "win_pct": 100.0, "total": 1}, "all": {"record": "4-3", "win_pct": 57.1, "total": 7}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
+const EP_TRACKERS = {"Pat": {"net_units": -6.88, "net_units_conf": -0.56, "conf": {"record": "3-3", "win_pct": 50.0, "total": 6}, "all": {"record": "17-20", "win_pct": 45.9, "total": 37}, "ou": {"record": "12-11-1", "win_pct": 52.2, "total": 24}}, "Tommy": {"net_units": 1.95, "net_units_conf": 1.85, "conf": {"record": "10-5", "win_pct": 66.7, "total": 15}, "all": {"record": "18-10", "win_pct": 64.3, "total": 28}, "ou": {"record": "4-1", "win_pct": 80.0, "total": 5}}, "Brendan": {"net_units": -1.27, "net_units_conf": 1.4, "conf": {"record": "4-1", "win_pct": 80.0, "total": 5}, "all": {"record": "25-23", "win_pct": 52.1, "total": 48}, "ou": {"record": "3-9-1", "win_pct": 25.0, "total": 13}}, "Majority": {"net_units": -4.03, "net_units_conf": -1.78, "conf": {"record": "2-3", "win_pct": 40.0, "total": 5}, "all": {"record": "16-15", "win_pct": 51.6, "total": 31}, "ou": {"record": "2-2", "win_pct": 50.0, "total": 4}}, "Unanimous": {"net_units": -0.7, "net_units_conf": 0.53, "conf": {"record": "1-0", "win_pct": 100.0, "total": 1}, "all": {"record": "4-3", "win_pct": 57.1, "total": 7}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
 const EP_EXPERTS = ["Pat","Tommy","Brendan"];
 let EP_ME = null;  // always start greyed each visit; user must tap "I am" to enable their row
 let EP_UNLOCKED = sessionStorage.getItem("ep_unlocked")==="1";
@@ -660,7 +660,12 @@ function epRenderTrackers(){
     var net = hasAny
       ? '<div class="ep-tline net"><span>Net Units</span><span><span class="ep-tu '+(v>=0?'pos':'neg')+'">'+(v>=0?'+':'')+v.toFixed(2)+'u</span> <span class="ep-ct">'+nt+'p</span></span></div>'
       : '<div class="ep-tline net"><span>Net Units</span><span>&mdash;</span></div>';
-    return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+net+wp('Conf',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
+    var vc=d.net_units_conf||0;
+    var nct=(d.conf&&d.conf.total)||0;
+    var netConf = nct
+      ? '<div class="ep-tline net"><span>Net Units Conf</span><span><span class="ep-tu '+(vc>=0?'pos':'neg')+'">'+(vc>=0?'+':'')+vc.toFixed(2)+'u</span> <span class="ep-ct">'+nct+'p</span></span></div>'
+      : '<div class="ep-tline net"><span>Net Units Conf</span><span>&mdash;</span></div>';
+    return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+netConf+net+wp('Conf',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
   }).join('');
 }
 function epNet(pk){
