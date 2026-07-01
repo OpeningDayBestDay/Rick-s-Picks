@@ -140,6 +140,31 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ep-trk{display:flex;gap:8px;flex-wrap:wrap;max-width:540px;margin:0 auto 14px;padding:0 12px;}
 .ep-tcard{flex:1 1 calc(50% - 4px);min-width:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;}
 .ep-tcard .nm{font-weight:900;font-size:.9rem;color:var(--navy);}
+.ep-medals{font-size:.85rem;letter-spacing:-1px;white-space:nowrap;}
+#ep-awards{margin:12px 0 4px;}
+.ep-awtitle{font-weight:900;font-size:.72rem;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;text-align:center;margin-bottom:8px;opacity:.85;}
+.ep-awrow{display:flex;gap:8px;}
+.ep-banner{flex:1 1 0;min-width:0;border-radius:12px;padding:10px 6px;text-align:center;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,43,92,.08);}
+.ep-banner.gold{background:linear-gradient(135deg,#fff8e1,#ffe082);border-color:#f0c419;}
+.ep-banner.silver{background:linear-gradient(135deg,#fafafa,#cfd8dc);border-color:#b0bec5;}
+.ep-banner.poop{background:linear-gradient(135deg,#efebe9,#d7ccc8);border-color:#a1887f;}
+.ep-bmed{font-size:1.7rem;line-height:1;}
+.ep-btitle{font-weight:900;font-size:.66rem;text-transform:uppercase;letter-spacing:.3px;color:var(--navy);margin-top:3px;}
+.ep-bwin{font-weight:900;font-size:.92rem;color:var(--navy);margin-top:3px;}
+.ep-brank{font-size:.62rem;color:var(--muted);margin-top:2px;line-height:1.3;}
+.ep-brk{font-weight:800;text-transform:uppercase;letter-spacing:.2px;font-size:.54rem;opacity:.7;}
+.ep-bsub{font-size:.58rem;color:var(--muted);margin-top:1px;line-height:1.2;}
+.ep-awrule{margin-top:8px;font-size:.66rem;line-height:1.45;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:10px;padding:7px 10px;}
+.ep-awrule b{color:var(--navy);}
+.ep-awrule-cur{display:block;margin-top:3px;font-weight:700;color:var(--navy);}
+#ep-standings{margin:10px 0 4px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 11px;}
+.ep-sttitle{font-weight:900;font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;}
+.ep-strow{display:flex;justify-content:space-between;gap:10px;font-size:.72rem;padding:3px 0;align-items:baseline;border-top:1px solid var(--border);}
+.ep-strow:first-of-type{border-top:none;}
+.ep-stlbl{font-weight:800;color:var(--navy);white-space:nowrap;}
+.ep-stval{text-align:right;color:var(--muted);}
+.ep-stlead{color:var(--navy);font-weight:800;}
+.ep-stdot{margin:0 5px;opacity:.4;}
 .ep-tline{display:flex;justify-content:space-between;font-size:.72rem;margin-top:5px;color:#666;}
 .ep-tline b{font-size:.85rem;color:var(--navy);}
 .ep-vcard{max-width:540px;margin:0 auto 12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px 14px;}
@@ -257,6 +282,8 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
         <span id="ep-sync" class="ep-sync">connecting&hellip;</span>
       </div>
       <div class="ep-note">Pick every game. Flip <b>Confident</b> to YES only on games you feel strongly about &mdash; those are the only picks that nudge the model (&plusmn;0.75pp each, &plusmn;5pp if all three agree). Each game's votes lock when that game is published.</div>
+      <div id="ep-awards"></div>
+      <div id="ep-standings"></div>
       <div class="ep-trk" id="ep-trackers"></div>
       <div class="ep-foot"><b>Net Units</b> = 1u/pick at the entered Vegas odds &middot; <b>Net Units Conf</b> = same, confident picks only &middot; <b>Conf</b> = Confident. Conf / All / O/U are win %; pick count (e.g. <b>13p</b>) shown for credibility.</div>
       <div id="ep-vlist"></div>
@@ -596,6 +623,36 @@ const EP_PW = "roundtable";
 const EP_FB = {"apiKey": "AIzaSyA7NQXH_Y1GDB1eLRq67D3tEcqCcDw15Co", "authDomain": "ricks-picks.firebaseapp.com", "projectId": "ricks-picks", "storageBucket": "ricks-picks.firebasestorage.app", "messagingSenderId": "576770622779", "appId": "1:576770622779:web:629f18b09f6f5ebd9f231e", "measurementId": "G-W19PJXV1B0"};
 const EP_DATE = "2026-07-01";
 const EP_TRACKERS = {"Pat": {"net_units": 2.1, "net_units_conf": 4.13, "conf": {"record": "20-13", "win_pct": 60.6, "total": 33}, "all": {"record": "91-73", "win_pct": 55.5, "total": 164}, "ou": {"record": "48-54-4", "win_pct": 47.1, "total": 106}}, "Tommy": {"net_units": -7.98, "net_units_conf": 4.09, "conf": {"record": "23-12", "win_pct": 65.7, "total": 35}, "all": {"record": "57-51", "win_pct": 52.8, "total": 108}, "ou": {"record": "10-10-2", "win_pct": 50.0, "total": 22}}, "Brendan": {"net_units": 1.54, "net_units_conf": 1.95, "conf": {"record": "12-5", "win_pct": 70.6, "total": 17}, "all": {"record": "103-86", "win_pct": 54.5, "total": 189}, "ou": {"record": "3-9-1", "win_pct": 25.0, "total": 13}}, "Majority": {"net_units": -6.11, "net_units_conf": 2.39, "conf": {"record": "12-5", "win_pct": 70.6, "total": 17}, "all": {"record": "74-64", "win_pct": 53.6, "total": 138}, "ou": {"record": "4-6", "win_pct": 40.0, "total": 10}}, "Unanimous": {"net_units": 5.4, "net_units_conf": 1.22, "conf": {"record": "2-0", "win_pct": 100.0, "total": 2}, "all": {"record": "26-13", "win_pct": 66.7, "total": 39}, "ou": {"record": "0-0", "win_pct": 0.0, "total": 0}}};
+const EP_AWARDS = {"generated_at": "2026-07-01T09:34:27.811858+00:00", "last_closed_month": "2026-06", "active_month": "2026-07", "current_standings": {"Pat": {"net": 0.0, "net_conf": 0.0}, "Tommy": {"net": 0.0, "net_conf": 0.0}, "Brendan": {"net": 0.0, "net_conf": 0.0}}, "active_influence": {"Pat": 0.75, "Tommy": 0.75, "Brendan": 0.75}, "penalty_step": 0.25, "base_influence": 0.75, "months": {"2026-06": {"confident_king": "Pat", "raw_dog_champ": "Pat", "dumbasses": [], "stats": {"Pat": {"net": 2.1, "net_conf": 4.13}, "Tommy": {"net": -7.98, "net_conf": 4.09}, "Brendan": {"net": 1.54, "net_conf": 1.95}}}}, "medals": {"Pat": {"gold": 1, "silver": 1, "poop": 0}, "Tommy": {"gold": 0, "silver": 0, "poop": 0}, "Brendan": {"gold": 0, "silver": 0, "poop": 0}}};
+function epMedalStr(name){
+  var m=(EP_AWARDS&&EP_AWARDS.medals||{})[name]; if(!m) return '';
+  var s=''; var i;
+  for(i=0;i<(m.gold||0);i++) s+='🥇';    // gold
+  for(i=0;i<(m.silver||0);i++) s+='🥈';  // silver
+  for(i=0;i<(m.poop||0);i++) s+='💩';    // poop
+  return s ? ' <span class="ep-medals" title="career medals">'+s+'</span>' : '';
+}
+function epRenderAwards(){
+  var el=document.getElementById('ep-awards'); if(!el) return;
+  var lm=EP_AWARDS&&EP_AWARDS.last_closed_month;
+  if(!lm||!EP_AWARDS.months||!EP_AWARDS.months[lm]){ el.innerHTML=''; return; }
+  var a=EP_AWARDS.months[lm];
+  var mname; try{ mname=new Date(lm+'-01T00:00:00').toLocaleString('en-US',{month:'long',year:'numeric'}); }catch(e){ mname=lm; }
+  var dumb=(a.dumbasses&&a.dumbasses.length)? a.dumbasses.join(', ') : '—';
+  var infl=(EP_AWARDS&&EP_AWARDS.active_influence)||{};
+  var nondef=EP_EXPERTS.filter(function(e){ return infl[e]!==undefined && Math.abs(infl[e]-0.75)>1e-9; });
+  var wtxt = nondef.length
+    ? 'This month: '+EP_EXPERTS.map(function(e){ return e+' '+(infl[e]!==undefined?infl[e]:0.75).toFixed(2)+'pp'; }).join(' · ')
+    : 'No penalty active this month — everyone at 0.75pp.';
+  el.innerHTML=
+    '<div class="ep-awtitle">'+mname+' · Panel Awards</div>'+
+    '<div class="ep-awrow">'+
+      '<div class="ep-banner gold"><div class="ep-bmed">🥇</div><div class="ep-btitle">Confident King</div>'+epPodium(a.stats,'net_conf')+'</div>'+
+      '<div class="ep-banner silver"><div class="ep-bmed">🥈</div><div class="ep-btitle">Raw Dog Champion</div>'+epPodium(a.stats,'net')+'</div>'+
+      '<div class="ep-banner poop"><div class="ep-bmed">💩</div><div class="ep-btitle">Dumbass of the Month</div><div class="ep-bwin">'+dumb+'</div><div class="ep-bsub">anyone negative on confident units</div></div>'+
+    '</div>'+
+    '<div class="ep-awrule"><b>💩 → 🥇 Dumbass Penalty:</b> each Dumbass of the Month forfeits <b>0.25pp</b> of their individual confident-vote influence (0.75 → 0.50pp) to the Confident King (+0.25pp per Dumbass) for the following month. Unanimous 3-0 confident nudges (±5pp) are unaffected. <span class="ep-awrule-cur">'+wtxt+'</span></div>';
+}
 const EP_EXPERTS = ["Pat","Tommy","Brendan"];
 let EP_ME = null;  // always start greyed each visit; user must tap "I am" to enable their row
 let EP_UNLOCKED = sessionStorage.getItem("ep_unlocked")==="1";
@@ -651,6 +708,37 @@ function epSetOu(pk,e,val){
   var ouNew = (cur.ou===code) ? null : code;
   epWrite(pk,e,{s:cur.s||null, c:cur.c||false, ou:ouNew});
 }
+function epPodium(stats, metric){
+  var arr=EP_EXPERTS.map(function(e){ return {e:e, v:(stats[e]&&stats[e][metric])||0}; });
+  arr.sort(function(a,b){ return b.v-a.v; });
+  var fmt=function(x){ return x.e+' '+(x.v>=0?'+':'')+x.v.toFixed(2)+'u'; };
+  return '<div class="ep-bwin">'+fmt(arr[0])+'</div>'+
+         '<div class="ep-brank"><span class="ep-brk">2nd</span> '+fmt(arr[1])+'</div>'+
+         '<div class="ep-brank"><span class="ep-brk">last</span> '+fmt(arr[2])+'</div>';
+}
+function epRankStats(stats, metric){
+  var arr=EP_EXPERTS.map(function(e){ return {e:e, v:(stats[e]&&stats[e][metric])||0}; });
+  arr.sort(function(a,b){ return b.v-a.v; });
+  var top=arr.length?arr[0].v:0;
+  return arr.map(function(x){
+    var lead=Math.abs(x.v-top)<1e-9;
+    return '<span class="'+(lead?'ep-stlead':'')+'">'+x.e+' '+(x.v>=0?'+':'')+x.v.toFixed(2)+'u</span>';
+  }).join('<span class="ep-stdot">·</span>');
+}
+function epRenderStandings(){
+  var el=document.getElementById('ep-standings'); if(!el) return;
+  var cs=(EP_AWARDS&&EP_AWARDS.current_standings); var cm=(EP_AWARDS&&EP_AWARDS.active_month);
+  if(!cs){ el.innerHTML=''; return; }
+  var mname; try{ mname=new Date(cm+'-01T00:00:00').toLocaleString('en-US',{month:'long'}); }catch(e){ mname=cm; }
+  var rankRow=function(metric){ return epRankStats(cs, metric); };
+  var neg=EP_EXPERTS.filter(function(e){ return ((cs[e]&&cs[e].net_conf)||0)<0; });
+  var dumbtxt=neg.length ? neg.map(function(e){ return e+' '+cs[e].net_conf.toFixed(2)+'u'; }).join(' · ') : 'nobody yet 👍';
+  el.innerHTML=
+    '<div class="ep-sttitle">'+mname+' standings · live race</div>'+
+    '<div class="ep-strow"><span class="ep-stlbl">🥇 Confident King</span><span class="ep-stval">'+rankRow('net_conf')+'</span></div>'+
+    '<div class="ep-strow"><span class="ep-stlbl">🥈 Raw Dog Champ</span><span class="ep-stval">'+rankRow('net')+'</span></div>'+
+    '<div class="ep-strow"><span class="ep-stlbl">💩 Dumbass watch</span><span class="ep-stval">'+dumbtxt+'</span></div>';
+}
 function epRenderTrackers(){
   var names=EP_EXPERTS.concat(['Majority','Unanimous']);
   var wp=function(lbl,t){
@@ -670,7 +758,8 @@ function epRenderTrackers(){
     var netConf = nct
       ? '<div class="ep-tline net"><span>Net Units Conf</span><span><span class="ep-tu '+(vc>=0?'pos':'neg')+'">'+(vc>=0?'+':'')+vc.toFixed(2)+'u</span> <span class="ep-ct">'+nct+'p</span></span></div>'
       : '<div class="ep-tline net"><span>Net Units Conf</span><span>&mdash;</span></div>';
-    return '<div class="ep-tcard"><div class="nm">'+n+'</div>'+netConf+net+wp('Conf',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
+    var medal=(n==='Pat'||n==='Tommy'||n==='Brendan')? epMedalStr(n) : '';
+    return '<div class="ep-tcard"><div class="nm">'+n+medal+'</div>'+netConf+net+wp('Conf',d.conf)+wp('All',d.all)+wp('O/U',d.ou)+'</div>';
   }).join('');
 }
 function epNet(pk){
@@ -718,7 +807,7 @@ function epRenderVoting(){
   });
   document.getElementById('ep-vlist').innerHTML=h;
 }
-function epRender(){ epApplyLock(); epRenderTrackers(); epRenderVoting(); }
+function epRender(){ epApplyLock(); epRenderAwards(); epRenderStandings(); epRenderTrackers(); epRenderVoting(); }
 function epLinesUnlock(){
   if(document.getElementById('ep-lines-pw').value==='onlypcenter'){ EP_LINES_UNLOCKED=true; sessionStorage.setItem('ep_lines_unlocked','1'); epApplyLinesLock(); }
   else { document.getElementById('ep-lines-pw-err').textContent='Wrong password.'; }
