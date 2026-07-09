@@ -904,6 +904,7 @@ const FT_KEYS = {hitters:["OBP","OPS","SLG","K%"],sp:["IP","ERA","K/BB","whiff%"
 const FT_LGMAP = {hitters:"hitter",sp:"sp",rp:"rp"};
 const FT_PH = {hitters:"hitter",sp:"starter",rp:"reliever"};
 let FT_ME = null;
+let FT_SUPPRESS = false;
 let FT_ROSTERS = {Pat:{hitters:[],sp:[],rp:[]},Tommy:{hitters:[],sp:[],rp:[]},Brendan:{hitters:[],sp:[],rp:[]}};
 let FT_UNLOCKED = sessionStorage.getItem("ft_unlocked")==="1";
 let ftDocs = {};
@@ -946,10 +947,12 @@ function ftSuggest(person,cat,i,q){
 }
 function ftPick(person,cat,i,id,name){
   if(person!==FT_ME) return;
+  FT_SUPPRESS=true;                       // ignore the stale blur-change the old input fires
   ftWrite(person,cat,i,{n:name,id:id}); renderFantasy();
+  setTimeout(function(){ FT_SUPPRESS=false; }, 250);
 }
 function ftType(person,cat,i,val){
-  if(person!==FT_ME) return;
+  if(person!==FT_ME || FT_SUPPRESS) return;
   val=(val||'').trim();
   var cur=(FT_ROSTERS[person][cat]||[])[i];
   if(cur&&typeof cur==='object'&&cur.n===val) return;
