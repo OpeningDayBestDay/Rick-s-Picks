@@ -974,7 +974,7 @@ function ftBadge(p,flag){ if(p===null||p===undefined)return ''; var c=flag==='go
 function ftLg(cat,stat){ var lg=(FT_RENDER.league||{})[FT_LGMAP[cat]]||{}; return lg[stat]; }
 function ftStatBlock(slot,cat){
   var keys=FT_KEYS[cat];
-  var h='<div class="ft-stwrap"><div class="ft-sthead l">Stat</div><div class="ft-sthead">Season</div><div class="ft-sthead">Last 14</div>';
+  var h='<div class="ft-stwrap"><div class="ft-sthead l">Stat <span style="opacity:.7;text-transform:none;">(lg avg)</span></div><div class="ft-sthead">Season</div><div class="ft-sthead">Last 14</div>';
   keys.forEach(function(k){
     var se=(slot.season||{})[k]||{}, l4=(slot.last14||{})[k]||{};
     var lg=ftLg(cat,k); var lgs=(lg!=null&&k!=='days_rest'&&k!=='saves')?' <span class="lg">('+ftFmt(k,lg)+')</span>':'';
