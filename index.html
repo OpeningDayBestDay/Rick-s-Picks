@@ -209,6 +209,31 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ln-inputs input{padding:7px;border:1px solid var(--border);border-radius:7px;background:var(--cream);color:var(--navy);font-size:.9rem;font-weight:700;text-align:center;}
 .ep-vegas{font-size:.66rem;color:#666;margin-top:4px;font-weight:600;}
 .ep-vegas.none{color:#bbb;font-style:italic;}
+.ft-sech{background:var(--navy);color:var(--cream);padding:8px 14px;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;border-radius:10px 10px 0 0;margin:14px 12px 0;}
+.ft-subh{background:#013a73;color:var(--cream);padding:5px 14px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin:0 12px;}
+.ft-card{background:var(--card);border:1px solid var(--border);border-top:none;padding:11px 13px;margin:0 12px;}
+.ft-card:last-child{border-radius:0 0 10px 10px;}
+.ft-pname{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.ft-pname input{flex:1;padding:7px 9px;border:1px solid var(--border);border-radius:7px;background:var(--cream);color:var(--navy);font-size:.95rem;font-weight:800;}
+.ft-pname input:disabled{background:#efe9d8;color:var(--navy);opacity:1;border-color:transparent;}
+.ft-slotn{font-size:.62rem;color:var(--muted);font-weight:700;width:22px;text-align:center;}
+.ft-stwrap{display:grid;grid-template-columns:1fr auto auto;gap:5px 12px;align-items:start;margin-top:4px;}
+.ft-sthead{font-size:.56rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:800;text-align:right;}
+.ft-sthead.l{text-align:left;}
+.ft-stlbl{font-size:.72rem;font-weight:700;color:var(--navy);padding-top:2px;}
+.ft-stlbl .lg{color:var(--muted);font-weight:600;font-size:.62rem;}
+.ft-stcell{text-align:right;}
+.ft-stv{font-size:.84rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;}
+.ft-stp{font-size:.55rem;font-weight:800;margin-top:1px;}
+.ft-good{color:var(--green);} .ft-bad{color:var(--red);} .ft-neu{color:#555;}
+.ft-pill{display:inline-block;border-radius:9px;padding:0 5px;color:#fff;}
+.ft-pg{background:var(--green);} .ft-pb{background:var(--red);} .ft-pn{background:#9a8f6e;}
+.ft-note{margin-top:9px;padding:8px 10px;border-radius:8px;font-size:.74rem;line-height:1.4;border-left:4px solid var(--muted);background:#f6f1e2;}
+.ft-note.favorable{border-left-color:var(--green);background:#eef7ee;}
+.ft-note.tough{border-left-color:var(--red);background:#fdeef0;}
+.ft-empty{color:var(--muted);font-style:italic;font-size:.75rem;padding:3px 0;}
+.ft-pend{font-size:.58rem;color:var(--muted);text-align:right;margin-top:6px;font-style:italic;}
+.ft-prompt{text-align:center;color:var(--red);font-weight:700;padding:14px;font-size:.85rem;}
 </style>
 </head>
 <body>
@@ -226,6 +251,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
     <button class="tab" onclick="switchTab('rake',this)">Rake It In</button>
     <button class="tab" onclick="switchTab('panel',this)">Expert Panel &#x1F512;</button>
     <button class="tab" onclick="switchTab('lines',this)">Lines &#x1F512;</button>
+    <button class="tab" onclick="switchTab('fantasy',this)">Fantasy &#x1F512;</button>
   </div>
 
   <div id="tab-today" class="tab-panel active">
@@ -301,6 +327,26 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
     <div id="ep-lines-inner" style="display:none">
       <div class="ep-note">Enter current Vegas lines. They appear as implied win% on the Expert Panel tab to help the voters. This tab <b>never locks</b> &mdash; update lines any time.</div>
       <div id="ep-lines-list"></div>
+    </div>
+  </div>
+
+  <div id="tab-fantasy" class="tab-panel">
+    <div class="hdr"><div><h1>Fantasy Tracker</h1><sub>Pat &middot; Tommy &middot; Brendan</sub></div><img src="patrick.png" alt="Patrick"></div>
+    <div id="ft-lock" class="ep-lock"><div class="ep-lock-box">
+      <div class="ep-lock-title">&#x1F512; Voters only</div>
+      <input id="ft-pw" type="password" placeholder="Panel password" autocomplete="off" onkeydown="if(event.key==='Enter')ftUnlock()">
+      <button onclick="ftUnlock()">Unlock</button>
+      <div id="ft-pw-err" class="ep-err"></div>
+    </div></div>
+    <div id="ft-inner" style="display:none">
+      <div class="ep-idbar"><span class="ep-lbl">I am:</span>
+        <button class="ft-id" data-me="Pat" onclick="ftSetMe('Pat')">Pat</button>
+        <button class="ft-id" data-me="Tommy" onclick="ftSetMe('Tommy')">Tommy</button>
+        <button class="ft-id" data-me="Brendan" onclick="ftSetMe('Brendan')">Brendan</button>
+        <span id="ft-sync" class="ep-sync">connecting&hellip;</span>
+      </div>
+      <div class="ep-note">Track up to <b>5 hitters, 5 starters, 5 relievers</b> each. Stats refresh every morning with the FantasyTab skill. <span style="color:var(--green);font-weight:800;">Green</span> beats league average, <span style="color:var(--red);font-weight:800;">red</span> trails it (K% flipped). The badge under each Season value is that stat's league percentile (natural rank &mdash; the color, not the number, tells you good vs bad). Your roster persists until you change it.</div>
+      <div id="ft-body"></div>
     </div>
   </div>
 </div>
@@ -526,6 +572,7 @@ function switchTab(name, btn){
   if(name === 'rake') renderRake();
   if(name === 'panel') renderPanel();
   if(name === 'lines') renderLines();
+  if(name === 'fantasy') renderFantasy();
 }
 
 function renderRake(){
@@ -839,7 +886,98 @@ function renderLines(){
   el.innerHTML=h;
 }
 function renderPanel(){ epRender(); }
+/* ===== Fantasy Tracker (additive; FT_-prefixed) ===== */
+const FT_RENDER = {};
+const FT_PEOPLE = ["Pat","Tommy","Brendan"];
+const FT_CATS = [["hitters","Hitters"],["sp","Starting Pitchers"],["rp","Relievers"]];
+const FT_KEYS = {hitters:["OBP","OPS","SLG","K%"],sp:["IP","ERA","K/BB","whiff%","stuff"],rp:["K/BB","ERA","whiff%","stuff","days_rest","saves"]};
+const FT_LGMAP = {hitters:"hitter",sp:"sp",rp:"rp"};
+const FT_PH = {hitters:"hitter",sp:"starter",rp:"reliever"};
+let FT_ME = null;
+let FT_ROSTERS = {Pat:{hitters:[],sp:[],rp:[]},Tommy:{hitters:[],sp:[],rp:[]},Brendan:{hitters:[],sp:[],rp:[]}};
+let FT_UNLOCKED = sessionStorage.getItem("ft_unlocked")==="1";
+let ftDocs = {};
+function ftUnlock(){ if(document.getElementById('ft-pw').value===EP_PW){FT_UNLOCKED=true;sessionStorage.setItem('ft_unlocked','1');ftApplyLock();} else {document.getElementById('ft-pw-err').textContent='Wrong password.';} }
+function ftApplyLock(){ var lk=document.getElementById('ft-lock'),inn=document.getElementById('ft-inner'); if(!lk||!inn)return; lk.style.display=FT_UNLOCKED?'none':'block'; inn.style.display=FT_UNLOCKED?'block':'none'; }
+function ftSetMe(n){ FT_ME=n; renderFantasy(); }
+function ftSync(cls,txt){ var d=document.getElementById('ft-sync'); if(d){d.className='ep-sync '+cls;d.innerHTML=txt;} }
+function ftInit(){
+  try{
+    if(!firebase.apps.length) firebase.initializeApp(EP_FB);
+    var db=firebase.firestore();
+    FT_PEOPLE.forEach(function(nm){
+      var d=db.collection('fantasy').doc(nm); ftDocs[nm]=d;
+      d.onSnapshot(function(snap){
+        var data=(snap.exists&&snap.data())?snap.data():{};
+        FT_ROSTERS[nm]={hitters:(data.hitters||[]).slice(0,5),sp:(data.sp||[]).slice(0,5),rp:(data.rp||[]).slice(0,5)};
+        ftSync('ok','&#9679; live'); renderFantasy();
+      }, function(err){ ftSync('err','offline'); });
+    });
+  }catch(e){ ftSync('err','offline'); }
+}
+function ftEdit(person,cat,i,val){
+  if(person!==FT_ME) return;
+  var arr=(FT_ROSTERS[person][cat]||[]).slice(0,5); while(arr.length<5)arr.push("");
+  arr[i]=val.trim(); FT_ROSTERS[person][cat]=arr;
+  var payload={}; payload[cat]=arr;
+  if(ftDocs[person]) ftDocs[person].set(payload,{merge:true}).catch(function(){});
+  renderFantasy();
+}
+function ftFmt(stat,v){ if(v===null||v===undefined)return '&mdash;';
+  if(stat==='OBP'||stat==='OPS'||stat==='SLG')return v.toFixed(3).replace(/^0/,'');
+  if(stat==='K%'||stat==='whiff%')return (v*100).toFixed(1)+'%';
+  if(stat==='ERA'||stat==='K/BB'||stat==='stuff')return v.toFixed(2);
+  if(stat==='IP')return v.toFixed(1);
+  if(stat==='days_rest')return v.toFixed(1)+'d';
+  if(stat==='saves')return Math.round(v);
+  return v; }
+function ftOrd(n){ var s=["th","st","nd","rd"],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+function ftBadge(p,flag){ if(p===null||p===undefined)return ''; var c=flag==='good'?'ft-pg':(flag==='bad'?'ft-pb':'ft-pn'); return '<div class="ft-stp"><span class="ft-pill '+c+'">'+ftOrd(p)+'</span></div>'; }
+function ftLg(cat,stat){ var lg=(FT_RENDER.league||{})[FT_LGMAP[cat]]||{}; return lg[stat]; }
+function ftStatBlock(slot,cat){
+  var keys=FT_KEYS[cat];
+  var h='<div class="ft-stwrap"><div class="ft-sthead l">Stat</div><div class="ft-sthead">Season</div><div class="ft-sthead">Last 14</div>';
+  keys.forEach(function(k){
+    var se=(slot.season||{})[k]||{}, l4=(slot.last14||{})[k]||{};
+    var lg=ftLg(cat,k); var lgs=(lg!=null&&k!=='days_rest'&&k!=='saves')?' <span class="lg">('+ftFmt(k,lg)+')</span>':'';
+    h+='<div class="ft-stlbl">'+k+lgs+'</div>'
+     +'<div class="ft-stcell"><div class="ft-stv ft-'+(se.f||'neu')+'">'+ftFmt(k,se.v)+'</div>'+ftBadge(se.p,se.f)+'</div>'
+     +'<div class="ft-stcell"><div class="ft-stv ft-'+(l4.f||'neu')+'">'+ftFmt(k,l4.v)+'</div></div>';
+  });
+  return h+'</div>';
+}
+function renderFantasy(){
+  ftApplyLock();
+  document.querySelectorAll('.ft-id').forEach(function(b){ b.classList.toggle('sel',b.dataset.me===FT_ME); });
+  var players=FT_RENDER.players||{};
+  var out='';
+  if(!FT_ME) out+='<div class="ft-prompt">&#9757; Tap your name above to edit your roster.</div>';
+  var order=FT_ME?[FT_ME].concat(FT_PEOPLE.filter(function(p){return p!==FT_ME;})):FT_PEOPLE;
+  order.forEach(function(person){
+    var mine=person===FT_ME;
+    out+='<div class="ft-sech">'+person+(mine?' &mdash; your roster (editable)':'')+'</div>';
+    FT_CATS.forEach(function(ct){
+      var cat=ct[0]; out+='<div class="ft-subh">'+ct[1]+'</div>';
+      var arr=((FT_ROSTERS[person]&&FT_ROSTERS[person][cat])||[]).slice(0,5); while(arr.length<5)arr.push("");
+      arr.forEach(function(nm,i){
+        out+='<div class="ft-card"><div class="ft-pname"><span class="ft-slotn">'+(i+1)+'</span>'
+          +'<input value="'+(nm||'').replace(/"/g,'&quot;')+'" placeholder="add a '+FT_PH[cat]+'&hellip;" '+(mine?'':'disabled')+' onchange="ftEdit(\''+person+'\',\''+cat+'\','+i+',this.value)"></div>';
+        if(nm&&nm.trim()){
+          var slot=players[person+'|'+cat+'|'+nm];
+          if(slot&&slot.id){
+            out+=ftStatBlock(slot,cat);
+            if(slot.note) out+='<div class="ft-note '+slot.note.tone+'">'+slot.note.text+'</div>';
+            else out+='<div class="ft-pend">no game today</div>';
+          } else out+='<div class="ft-empty">Stats populate on the next morning FantasyTab run.</div>';
+        }
+        out+='</div>';
+      });
+    });
+  });
+  document.getElementById('ft-body').innerHTML=out;
+}
 epInit();
+ftInit();
 </script>
 </body>
 </html>
