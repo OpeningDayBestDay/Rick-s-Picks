@@ -1013,24 +1013,19 @@ function ssRow(rank,ntot,d,off){
   return h+'</div></div>';
 }
 function ssTop10(){
-  var cats=[['hitters','Hitters','ops'],['sp','Starters','era'],['rp','Relievers','era']];
+  var cats=[['hitters','Hitters'],['sp','Starters'],['rp','Relievers']];
   var cols=cats.map(function(ct){
-    var cat=ct[0], unit=ct[2];
+    var cat=ct[0];
     var arr=Object.keys(SS_RENDER.players||{}).map(function(k){return SS_RENDER.players[k];})
       .filter(function(v){return v.cat===cat && v.plays && v.tr;})
       .sort(function(a,b){return a.tr-b.tr;}).slice(0,10);
-    var sub='';
     var rows=arr.map(function(v,i){
-      var key=(v.keys||[]).filter(function(k){return k.u===unit;})[0];
-      var kv=key?ssKeyFmt(key.u,key.v):''; if(key&&!sub) sub=key.l;
       var tm=(SH[v.team]||v.team||'');
       return '<div class="t10-row"><span class="t10-rk">'+(i+1)+'</span>'
-        +'<span class="t10-nm">'+v.name+'<span class="t10-tm">'+tm+'</span></span>'
-        +'<span class="t10-v">'+kv+'</span></div>';
+        +'<span class="t10-nm">'+v.name+'<span class="t10-tm">'+tm+'</span></span></div>';
     }).join('');
     if(!rows) rows='<div class="t10-empty">No games today.</div>';
-    return '<div class="t10-col"><div class="t10-h">'+ct[1]+'</div>'
-      +'<div class="t10-sub">'+(sub||unit.toUpperCase())+'</div>'+rows+'</div>';
+    return '<div class="t10-col"><div class="t10-h">'+ct[1]+'</div>'+rows+'</div>';
   }).join('');
   return '<div class="t10-wrap"><div class="t10-title">&#127942; Today\'s Top 10 &mdash; '+ssDateShort()
     +'</div><div class="t10-note">Model-ranked best plays for today across all qualified players. Not affected by your entries below.</div>'
