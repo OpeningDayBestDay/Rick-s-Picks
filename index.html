@@ -226,6 +226,9 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
 .ln-inputs{display:flex;gap:8px;flex-wrap:wrap;}
 .ln-inputs label{flex:1;min-width:88px;font-size:.6rem;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:700;display:flex;flex-direction:column;gap:3px;}
 .ln-inputs input{padding:7px;border:1px solid var(--border);border-radius:7px;background:var(--cream);color:var(--navy);font-size:.9rem;font-weight:700;text-align:center;}
+.ln-rowlbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:800;margin:6px 0 3px;}
+.ln-inputs.closing input{border-color:var(--navy);}
+.ln-lockedtag{display:inline-block;font-size:.58rem;font-weight:800;letter-spacing:.3px;padding:2px 7px;border-radius:999px;background:var(--navy);color:#fff;margin-left:6px;vertical-align:middle;}
 .ep-vegas{font-size:.66rem;color:#666;margin-top:4px;font-weight:600;}
 .ep-vegas.none{color:#bbb;font-style:italic;}
 .ft-sech{background:var(--navy);color:var(--cream);padding:8px 14px;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;border-radius:10px 10px 0 0;margin:14px 12px 0;}
@@ -424,7 +427,7 @@ body{background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe
       <div id="ep-lines-pw-err" class="ep-err"></div>
     </div></div>
     <div id="ep-lines-inner" style="display:none">
-      <div class="ep-note">Enter current Vegas lines. They appear as implied win% on the Expert Panel tab to help the voters. This tab <b>never locks</b> &mdash; update lines any time.</div>
+      <div class="ep-note"><b>Opening</b> row: the line the panel votes against (shown as implied win% on the Expert Panel tab). <b>Closing</b> row: the line the model bets &mdash; the hourly auto-run picks a game up once all three closing fields are filled and its lineups are posted. This tab <b>never locks</b> &mdash; but once a game shows <span class="ln-lockedtag">&#x2713; model locked</span> the run has already used that closing line and later edits are ignored.</div>
       <div id="ep-lines-list"></div>
     </div>
   </div>
@@ -756,6 +759,7 @@ function renderRake(){
 /* ===== Expert Panel (additive; EP_-prefixed) ===== */
 const EP_SLATE = [{"pk": 824792, "a": "Cleveland Guardians", "h": "Baltimore Orioles", "asp": "Tanner Bibee", "hsp": "Brandon Young", "venue_id": 2, "game_date": "2026-09-08T22:35:00Z", "asp_id": 676440, "hsp_id": 687064}, {"pk": 823414, "a": "Houston Astros", "h": "Philadelphia Phillies", "asp": "Hayden Wesneski", "hsp": "Andrew Painter", "venue_id": 2681, "game_date": "2026-09-08T22:40:00Z", "asp_id": 669713, "hsp_id": 691725}, {"pk": 823821, "a": "New York Mets", "h": "Miami Marlins", "asp": "Sean Manaea", "hsp": "Sandy Alcantara", "venue_id": 4169, "game_date": "2026-09-08T22:40:00Z", "asp_id": 640455, "hsp_id": 645261}, {"pk": 824228, "a": "Minnesota Twins", "h": "Detroit Tigers", "asp": "Dean Kremer", "hsp": "Drew Anderson", "venue_id": 2394, "game_date": "2026-09-08T22:40:00Z", "asp_id": 665152, "hsp_id": 623454}, {"pk": 824714, "a": "Los Angeles Angels", "h": "Boston Red Sox", "asp": "Reid Detmers", "hsp": "Patrick Sandoval", "venue_id": 3, "game_date": "2026-09-08T22:45:00Z", "asp_id": 672282, "hsp_id": 663776}, {"pk": 823500, "a": "Colorado Rockies", "h": "New York Yankees", "asp": "Gabriel Hughes", "hsp": "Cam Schlittler", "venue_id": 3313, "game_date": "2026-09-08T23:05:00Z", "asp_id": 687312, "hsp_id": 693645}, {"pk": 824875, "a": "Tampa Bay Rays", "h": "Atlanta Braves", "asp": "Freddy Peralta", "hsp": "AJ Smith-Shawver", "venue_id": 4705, "game_date": "2026-09-08T23:15:00Z", "asp_id": 642547, "hsp_id": 700363}, {"pk": 823738, "a": "Chicago Cubs", "h": "Milwaukee Brewers", "asp": "David Peterson", "hsp": "Jacob Misiorowski", "venue_id": 32, "game_date": "2026-09-08T23:40:00Z", "asp_id": 656849, "hsp_id": 694819}, {"pk": 824063, "a": "Arizona Diamondbacks", "h": "Kansas City Royals", "asp": "Corbin Burnes", "hsp": "Michael Wacha", "venue_id": 7, "game_date": "2026-09-08T23:40:00Z", "asp_id": 669203, "hsp_id": 608379}, {"pk": 824551, "a": "Pittsburgh Pirates", "h": "Chicago White Sox", "asp": "Bubba Chandler", "hsp": "Sean Burke", "venue_id": 4, "game_date": "2026-09-08T23:40:00Z", "asp_id": 696149, "hsp_id": 680732}, {"pk": 823092, "a": "Texas Rangers", "h": "Seattle Mariners", "asp": "TBD", "hsp": "TBD", "venue_id": 680, "game_date": "2026-09-09T01:40:00Z", "asp_id": null, "hsp_id": null}, {"pk": 823250, "a": "Washington Nationals", "h": "San Diego Padres", "asp": "Riley Cornelio", "hsp": "Casey Mize", "venue_id": 2680, "game_date": "2026-09-09T01:40:00Z", "asp_id": 683000, "hsp_id": 663554}, {"pk": 824957, "a": "Toronto Blue Jays", "h": "Athletics", "asp": "Jos\u00e9 Soriano", "hsp": "Jack Perkins", "venue_id": 2529, "game_date": "2026-09-09T01:40:00Z", "asp_id": 667755, "hsp_id": 678022}, {"pk": 823174, "a": "St. Louis Cardinals", "h": "San Francisco Giants", "asp": "Quinn Mathews", "hsp": "Landen Roupp", "venue_id": 2395, "game_date": "2026-09-09T01:45:00Z", "asp_id": 687273, "hsp_id": 694738}, {"pk": 823901, "a": "Cincinnati Reds", "h": "Los Angeles Dodgers", "asp": "Nick Lodolo", "hsp": "Tarik Skubal", "venue_id": 22, "game_date": "2026-09-09T02:10:00Z", "asp_id": 666157, "hsp_id": 669373}];
 const EP_LOCKED = [];
+const EP_CLOSING_LOCKED = {};   // {pk: {aml,hml,ou,at}} closing lines the hourly run locked today (display only)
 const EP_LOCKED_VOTES = {};
 const EP_PW = "roundtable";
 const EP_FB = {"apiKey": "AIzaSyA7NQXH_Y1GDB1eLRq67D3tEcqCcDw15Co", "authDomain": "ricks-picks.firebaseapp.com", "projectId": "ricks-picks", "storageBucket": "ricks-picks.firebasestorage.app", "messagingSenderId": "576770622779", "appId": "1:576770622779:web:629f18b09f6f5ebd9f231e", "measurementId": "G-W19PJXV1B0"};
@@ -1040,10 +1044,22 @@ function renderLines(){
   EP_SLATE.forEach(function(g){
     var ln=EP_LINES[g.pk]||{};
     var v=function(f){ return (ln[f]!=null)?ln[f]:''; };
-    h += '<div class="ln-row"><div class="ln-match">'+s(g.a)+' @ '+s(g.h)+'</div><div class="ln-inputs">'
+    // CLOSING-LINE ROW (2026-09-08, hourly automation): Pat types the closing line here;
+    // run_hourly.py reads caml/chml/cou from Firestore lines/<date> and locks the game once
+    // all three are present. EP_CLOSING_LOCKED (baked by build_dashboard) shows what the run
+    // actually locked so a later edit is visibly moot. Neither row ever locks (Pat 2026-09-08).
+    var ck=EP_CLOSING_LOCKED[String(g.pk)];
+    var lockTag = ck ? '<span class="ln-lockedtag" title="locked by the hourly run at '+ck.at+'">&#x2713; model locked '+fmtML(ck.aml)+' / '+fmtML(ck.hml)+' / '+ck.ou+'</span>' : '';
+    h += '<div class="ln-row"><div class="ln-match">'+s(g.a)+' @ '+s(g.h)+lockTag+'</div>'
+      + '<div class="ln-rowlbl">Opening (panel votes against this)</div><div class="ln-inputs">'
       + '<label>'+s(g.a)+' ML<input type="number" value="'+v('aml')+'" onchange="epSetLine('+g.pk+',\'aml\',this.value)"></label>'
       + '<label>'+s(g.h)+' ML<input type="number" value="'+v('hml')+'" onchange="epSetLine('+g.pk+',\'hml\',this.value)"></label>'
       + '<label>O/U<input type="number" step="0.5" value="'+v('ou')+'" onchange="epSetLine('+g.pk+',\'ou\',this.value)"></label>'
+      + '</div>'
+      + '<div class="ln-rowlbl">Closing (model bets this &mdash; fill all three)</div><div class="ln-inputs closing">'
+      + '<label>'+s(g.a)+' ML<input type="number" value="'+v('caml')+'" onchange="epSetLine('+g.pk+',\'caml\',this.value)"></label>'
+      + '<label>'+s(g.h)+' ML<input type="number" value="'+v('chml')+'" onchange="epSetLine('+g.pk+',\'chml\',this.value)"></label>'
+      + '<label>O/U<input type="number" step="0.5" value="'+v('cou')+'" onchange="epSetLine('+g.pk+',\'cou\',this.value)"></label>'
       + '</div></div>';
   });
   el.innerHTML=h;
