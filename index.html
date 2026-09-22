@@ -684,7 +684,7 @@ function renderRake(){
     // number when the ledger hasn't split them yet.
     const pnl=(lt.panel_net_units!==undefined)?lt.panel_net_units:diff, bn=lt.ban_net_units||0;
     let sub='Model-only (no panel): '+(lt.raw_ml_record||'0-0')+' &middot; <b>'+(rn>=0?'+':'')+rn.toFixed(2)+'u</b>  ·  panel '+(pnl>=0?'+':'')+pnl.toFixed(2)+'u';
-    if(lt.ban_net_units!==undefined) sub+='  ·  A's ban '+(bn>=0?'+':'')+bn.toFixed(2)+'u ('+(lt.ban_games||0)+' bets)';
+    if(lt.ban_net_units!==undefined) sub+='  ·  A&rsquo;s ban '+(bn>=0?'+':'')+bn.toFixed(2)+'u ('+(lt.ban_games||0)+' bets)';
     lifeSubEl.innerHTML = sub;
   } else {
     lifeSubEl.textContent = lt.total_picks ? `${lt.total_picks} picks tracked` : 'No picks graded yet';
